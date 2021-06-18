@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos</title>
+    <link rel="stylesheet" href="./favs.css">
+    <script src="./favs.js"></script>
+</head>
+<body>
+    <span class="top Line"></span>
+    <header>
+        <div class="logo" onclick="window.location='../index.html'">
+            <img src="../assets/logo-desktop.svg" alt="logo" class="logodesktop" id="logodesktop">
+            <img src="../assets/logo-mobile.svg" alt="logo" class="logomobile" id="logomobile">
+        </div>
+        <input type="checkbox" class="burgerMenu" id="burgerMenu">
+        <label for="burgerMenu" class="burgerMenuLabel">
+                <img src="../assets/burger.svg" alt="burger" id="burger">
+        </label>
+        <nav id="menu">
+            <ul class="menu-header">
+                <li><a href="#" class="modo-nocturno" id="modo-nocturno">MODO NOCTURNO</a><span class="separate"></span></li>
+                <li><a href="" class="favs">FAVORITOS</a><span class="separate"></span></li>
+                <li><a href="">MIS GIFOS</a><span class="separate"></span></li>
+                <li class="buttonCrearGifo"><a href="../crear-gifo/creargifo.html"><img src="../assets/button-crear-gifo.svg" alt=""></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="title">
+            <img class="favsIcon" src="../assets/icon-favoritos.svg" alt="">
+            <h1 class="favsTitle">Favoritos</h1>
+        </section>
+        <section class="results">
+            <img id="resultsIcon" class="resultsIcon" src="../assets/icon-fav-sin-contenido.svg" alt="">
+            <h2 id="resultsText" class="resultsText">"¡Guarda tu primer GIFO en Favoritos</br> para que se muestre aquí!"</h2>
+            <div id="searchResults" class="searchResults"></div>
+        </section>
+        <section class="trending-gifos" id="trending-gifos">
+            <h2>Trending GIFOS</h2>
+            <p>Mira los últimos GIFO de nuestra comunidad.</p>
+            <div class="scroll-father">
+                <div class="scrollLeft">
+                    <img id="buttonLeft"  class="buttonLeft" src="../assets/button-slider-left.svg" alt="botonIzquierdo">
+                    <img id="buttonLeftHover"  class="buttonLeftHover" src="../assets/button-slider-left-hover.svg" alt="botonIzquierdo">
+                </div>
+                <div class="scroll-son" id="scroll-son"></div>
+                <div class="scrollRight">
+                    <img id="buttonRight" class="buttonRight" src="../assets/Button-Slider-right.svg" alt="botonDerecho">
+                    <img id="buttonRightHover" class="buttonRightHover" src="../assets/Button-Slider-right-hover.svg" alt="botonDerecho">
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="socialMedia">
+            <p>Compartir en:</p>
+            <ul>
+                <li>
+                    <a class="facebookLink" href="https://www.facebook.com/" target="_blank">
+                        <img class="facebook" src="../assets/icon_facebook.svg" alt="">
+                        <img class="facebookHover" src="../assets/icon_facebook_hover.svg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="twitterLink" href="https://twitter.com/" target="_blank"> 
+                        <img class="twitter" src="../assets/icon-twitter.svg" alt="">
+                        <img class="twitterHover" src="../assets/icon-twitter-hover.svg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a class="instagramLink" href="https://instagram.com/" target="_blank"> 
+                        <img class="instagram" src="../assets/icon_instagram.svg" alt="">
+                        <img class="instagramHover" src="../assets/icon_instagram-hover.svg" alt="">
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <p>© GIFOS 2021 All Rights Reserved.</p>
+    </footer>
+    <span class="bottom Line"></span>
+</body>
+</html>
