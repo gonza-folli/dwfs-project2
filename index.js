@@ -116,7 +116,7 @@ window.onload = () => {
             inputSearchBar.value = ""
         }
     })
-    
+    // -----------    AUTOCOMPLETAR CON SUGERIDOS---------------------------------
     async function autocompleteSearch (searchBar) {
         let response = await fetch(`${urlPath}/search/tags?api_key=${apiKey2}&q=${searchBar}&limit=4&offset=0&rating=g&lang=en`)
         response = await response.json()
@@ -124,8 +124,9 @@ window.onload = () => {
         renderAutocompleteSearch (response)
     }
 
+    let li = document.querySelectorAll('.autoc')
+
     function renderAutocompleteSearch (response) {
-        let li = document.querySelectorAll('.autoc')
         separateSearch.style.display= "block"
         autocomplete.style.display = "flex"
         for (let i = 0; i < response.data.length; i++) {
@@ -136,27 +137,22 @@ window.onload = () => {
             //     let selectedLi = li[i].textContent
             //     console.log(selectedLi)
             //     console.log(inputSearchBar.value)
-            //     inputSearchBar.value == `${selectedLi}`
+            //     inputSearchBar.value == ""
             // })
-
-            // let li = document.createElement('li')
-            // li.innerHTML = `<img src="./assets/icon-search.svg" alt="suggestedSearch" class="iconSuggestedSearch">${response.data[i].name}`
-            // autocomplete.appendChild(li)
-            // console.log(li)
         }
-        
         if (inputSearchBar.value == "") {
             separateSearch.style.display= "none"
             autocomplete.style.display = "none"
         }
     }
-
+    //------------- LIMPIAR GIF OBTENIDOS COMO RESULTADOS ----------------------
     function cleanResults () {
         while (searchResults.childNodes.length > 0) {
             searchResults.removeChild(searchResults.lastChild);
         }
     }
 
+    // --------------------- RENDERIZAR TITULOS Y GIF --------------------------
     function renderSearchTitle (searchBar) {
         searchResultsTitle.innerHTML = `${searchBar}`
         searchResultsTitle.style.display = "block"
@@ -185,9 +181,9 @@ window.onload = () => {
             newDivHover.classList.add('containerGifSelected')
             newDivHover.innerHTML = 
             `<div class="icons">
-                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img src="./assets/icon-fav.svg" alt="fav"></button>
-                <button class="icon Des" id="Des-${response.data[i].id}" type="button"><img src="./assets/icon-download.svg" alt="des"></button>
-                <button class="icon Zoom" id="Zoom-${response.data[i].id}" type="button"><img src="./assets/icon-max-normal.svg" alt="max"></button>
+                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="./assets/icon-fav.svg" alt="fav"><img id="imgFav2-${response.data[i].id}" class="imgButtonHover" src="./assets/icon-fav-hover.svg" alt="fav"></button>
+                <button class="icon Des" id="Des-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="./assets/icon-download-hover.svg" alt="des"></button>
+                <button class="icon Zoom" id="Zoom-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-max-normal.svg" alt="max"><img class="imgButtonHover" src="./assets/icon-max-hover.svg" alt="max"></button>
             </div>
             <div class="text">
                 <span>User</span>
@@ -197,10 +193,21 @@ window.onload = () => {
 
 
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
+            let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
+            let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
             buttonFav.addEventListener('click', () => {
+                imgFav.setAttribute('src', './assets/icon-fav-active.svg')
+                imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
                 console.log(response.data[i].title)
+                checkRepeats(response.data[i])
+                
+                localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                if (checkRepeats() == false) {
+                    alert("NO AGREGADO")
+                } else {
                 favoritesGif.push(response.data[i])
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                }
             })
 
             let buttonZoom = document.getElementById(`Zoom-${response.data[i].id}`)
@@ -229,13 +236,27 @@ window.onload = () => {
         searchGifos(searchBar)
     })
 
+// ------------------------ COMPARAR CON FAVORITOS GUARDADOS ----------------------------
+    console.log(favoritesGif)
+    function checkRepeats (response) {
+        for (let i = 0; i < favoritesGif.length; i++) {
+            console.log(response.id)
+            if (favoritesGif[i].id !== response.id) {
+                alert("nuevo gif")
+                return
+            } else {
+                alert("ya se encuentra en favoritos")
+                return false
+            }
+        }
+    }
+
 //------------------------------TRENDING------------------------------------------------
     let scrollSon = document.getElementById('scroll-son')
 
     async function getTrending () {
         let response = await fetch(`${urlPath}/trending?api_key=${apiKey2}&limit=3&rating=g`)
         response = await response.json()
-        console.log(response)
         return response
     }
     getTrending().then(

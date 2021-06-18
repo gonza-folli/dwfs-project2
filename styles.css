@@ -350,8 +350,8 @@ div.scrollRight:hover img.buttonRight {
     display: none;
     position: absolute;
     top: 0px;
-    background-color: #3606e4;
-    opacity: 0.6;
+    background-color: rgba(54, 6, 228, 0.5);
+    /* opacity: 0.75; */
     width: 100%;
     height: 100%;
 }
@@ -362,6 +362,7 @@ div.scrollRight:hover img.buttonRight {
     position: absolute;
     right: 5%;
     top: 5px;
+    opacity: 0.80;
 }
 .containerGifSelected .icon{
     width: 32px;
@@ -370,10 +371,18 @@ div.scrollRight:hover img.buttonRight {
     outline: none;
     border: none;
 }
-/* section.trending-gifos .scroll-son .containerGif .containerGifSelected .icons .icon img{
-    width: 32px;
-    height: 32px;
-} */
+
+/* ------------------- HOVER ICONOS -------------------------- */
+.containerGifSelected .imgButtonHover {
+    display: none;
+}
+.containerGifSelected button:hover .imgButtonHover {
+    display: block;
+}
+.containerGifSelected button:hover .imgButton {
+    display: none;
+}
+
 .containerGif .containerGifSelected .icons .icon img{
     width: 32px;
     height: 32px;
@@ -584,7 +593,8 @@ body.night section.trending-gifos p {
 }
 body.night section.home input {
     background-color: #37383c;
-    border: 1px solid white;
+    color: white;
+    /* border: 1px solid white; */
 }
 body.night section.trending-gifos {
     background-color: #222326;
@@ -595,6 +605,12 @@ body.night section.zoomGif {
 body.night .containerGifSelected .text span {
     color: white;
 }
-body.night section.home input {
-    color: white;
+body.night section.home div.search-home {
+    border: 1px solid white;
 }
+body.night div.autocomplete {
+    color: dimgray;
+}
+/* body.night section.home input {
+    color: white;
+} */
