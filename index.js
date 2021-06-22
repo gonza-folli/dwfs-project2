@@ -118,9 +118,8 @@ window.onload = () => {
     })
     // -----------    AUTOCOMPLETAR CON SUGERIDOS---------------------------------
     async function autocompleteSearch (searchBar) {
-        let response = await fetch(`${urlPath}/search/tags?api_key=${apiKey2}&q=${searchBar}&limit=4&offset=0&rating=g&lang=en`)
+        let response = await fetch(`${urlPath}/search/tags?api_key=${apiKey}&q=${searchBar}&limit=4&offset=0&rating=g&lang=en`)
         response = await response.json()
-        // console.log(response)
         renderAutocompleteSearch (response)
     }
 
@@ -133,12 +132,12 @@ window.onload = () => {
             li[i].style.display= "block"
             li[i].setAttribute('id', `result${i}`)
             li[i].innerHTML = `<img src="./assets/icon-search.svg" alt="suggestedSearch" class="iconSuggestedSearch">${response.data[i].name}`
-            // li[i].addEventListener('click', () => {
-            //     let selectedLi = li[i].textContent
-            //     console.log(selectedLi)
-            //     console.log(inputSearchBar.value)
-            //     inputSearchBar.value == ""
-            // })
+            li[i].addEventListener('click', () => {
+                let selectedLi = li[i].textContent
+                inputSearchBar.value = selectedLi
+                separateSearch.style.display= "none"
+                autocomplete.style.display = "none"
+            })
         }
         if (inputSearchBar.value == "") {
             separateSearch.style.display= "none"
@@ -161,7 +160,7 @@ window.onload = () => {
     }
 
     async function searchGifos (searchBar) {
-        let response = await fetch(`${urlPath}/search?api_key=${apiKey2}&q=${searchBar}&limit=${searchBarLimit}&offset=${startingPosition}&rating=g&lang=en`)
+        let response = await fetch(`${urlPath}/search?api_key=${apiKey}&q=${searchBar}&limit=${searchBarLimit}&offset=${startingPosition}&rating=g&lang=en`)
         response = await response.json()
         console.log(response)
         renderGif(response, searchResults)
@@ -195,20 +194,18 @@ window.onload = () => {
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
+
             buttonFav.addEventListener('click', () => {
                 imgFav.setAttribute('src', './assets/icon-fav-active.svg')
                 imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
                 console.log(response.data[i].title)
-                checkRepeats(response.data[i])
-                
-                localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-                if (checkRepeats() == false) {
-                    alert("NO AGREGADO")
+                if (favoritesGif.includes(response.data[i])) {
+                    favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
                 } else {
-                favoritesGif.push(response.data[i])
-                localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                    favoritesGif.push(response.data[i])
                 }
-            })
+                localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                })
 
             let buttonZoom = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoom.addEventListener('click', () => {
@@ -236,26 +233,11 @@ window.onload = () => {
         searchGifos(searchBar)
     })
 
-// ------------------------ COMPARAR CON FAVORITOS GUARDADOS ----------------------------
-    console.log(favoritesGif)
-    function checkRepeats (response) {
-        for (let i = 0; i < favoritesGif.length; i++) {
-            console.log(response.id)
-            if (favoritesGif[i].id !== response.id) {
-                alert("nuevo gif")
-                return
-            } else {
-                alert("ya se encuentra en favoritos")
-                return false
-            }
-        }
-    }
-
 //------------------------------TRENDING------------------------------------------------
     let scrollSon = document.getElementById('scroll-son')
 
     async function getTrending () {
-        let response = await fetch(`${urlPath}/trending?api_key=${apiKey2}&limit=3&rating=g`)
+        let response = await fetch(`${urlPath}/trending?api_key=${apiKey}&limit=3&rating=g`)
         response = await response.json()
         return response
     }

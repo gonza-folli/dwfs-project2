@@ -189,6 +189,7 @@ div.searchResults .containerGif {
     width: 260px;
     height: 200px;
     position: relative;
+    display: none;
 }
 .containerGif img{
     width: 100%;
@@ -313,6 +314,19 @@ div.scrollRight:hover img.buttonRight {
     width: 32px;
     height: 32px;
 } */
+
+/* ------------------- HOVER ICONOS -------------------------- */
+.containerGifSelected .imgButtonHover {
+    display: none;
+}
+.containerGifSelected button:hover .imgButtonHover {
+    display: block;
+}
+.containerGifSelected button:hover .imgButton {
+    display: none;
+}
+
+
 .containerGif .containerGifSelected .icons .icon img{
     width: 32px;
     height: 32px;
@@ -446,7 +460,60 @@ a.instagramLink:hover img.instagram {
         font-size: 15px;
     }
 }
+/*------------------ ZOOM GIF ---------------*/
+section.zoomGif {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+section.zoomGif>img {
+    max-width: 48%;
+    max-height: 50%;
+}
+section.zoomGif img.zoomGifClose {
+    position: fixed;
+    top: 10%;
+    right: 20%;
+}
+section.zoomGif .containerGifSelected {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3%;
+}
+section.zoomGif .containerGifSelected .icons {
+    position: inherit;
+    display: flex;
+}
+section.zoomGif .containerGifSelected .icons .Zoom{
+    display: none;
+}
+section.zoomGif .containerGifSelected .text {
+    color: black;
+    position: inherit;
+}
+section.zoomGif .containerGifSelected .text span {
+    margin-top: 2%;
+}
 
+@media screen and (max-width: 768px) {
+    section.zoomGif>img {
+        max-width: 70%;
+        max-height: 50%;
+    }
+    section.zoomGif .containerGifSelected {
+        width: 80%;
+    }
+}
 /*------------------ MODO NOCTURNO ---------------*/
 
 body.night {
@@ -471,8 +538,21 @@ body.night section.trending-gifos p {
 }
 body.night section.home input {
     background-color: #37383c;
-    border: 1px solid white;
+    color: white;
+    /* border: 1px solid white; */
 }
 body.night section.trending-gifos {
     background-color: #222326;
+}
+body.night section.zoomGif {
+    background-color: black;
+}
+body.night .containerGifSelected .text span {
+    color: white;
+}
+body.night section.home div.search-home {
+    border: 1px solid white;
+}
+body.night div.autocomplete {
+    color: dimgray;
 }
