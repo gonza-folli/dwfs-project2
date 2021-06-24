@@ -165,17 +165,21 @@ img.favsIcon {
 .favsTitle {
     text-align: center;
 }
+section.results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
 
 img.resultsIcon {
     margin-top: 10%;
-    margin-left: 50%;
-    transform: translate(-50%);
+
 }
 h2.resultsText {
     color: #50E3C2;
     font-size: 22px;
     text-align: center;
-    /* margin-left: 35%; */
 }
 div.searchResults {
     display: flex;

@@ -137,14 +137,24 @@ window.onload = () => {
     let indexFinal = 12
     
 
+    // function renderMoreResults() {
+    //     for (let i = 0; i < indexFinal; i++) {
+    //         if (indexFinal <= containerGif.length) {
+    //             containerGif[i].style.display= "block"
+    //         }
+    //     }
+    // }
+    renderMoreResults()
+
     function renderMoreResults() {
+        if (indexFinal > containerGif.length) {
+          indexFinal = containerGif.length;
+        }
         for (let i = 0; i < indexFinal; i++) {
-            if (indexFinal <= containerGif.length) {
-                containerGif[i].style.display= "block"
-            }
+            containerGif[i].style.display= "block"
         }
     }
-    renderMoreResults()
+
 
 
     moreResults.addEventListener('click', () => {
