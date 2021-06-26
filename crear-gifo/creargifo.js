@@ -75,15 +75,19 @@ let screenButton3 = document.getElementById('screenButton3')
 
 console.log(navigator.mediaDevices)
 
+// --------------------------------COMENZAR PROCESO--------------------------------------------
 startButton.addEventListener('click', () => {
     screenText.style.display = "none"
     screenTextP.style.display = "none"
     screenText2.style.display = "block"
     screenTextP2.style.display = "block"
-    screenButton1.setAttribute('src', '../assets/paso-a-paso-hover.svg')
+    screenButton1.style.color = "white"
+    screenButton1.style.backgroundColor = "#572EE5"
+    startButton.style.display = "none"
     accessToCamera()
 })
 
+// --------------------------------ACCEDIENDO A LA CAMARA--------------------------------------------
 let stream = 0
 let recorder = 0
 let tracks = 0
@@ -98,8 +102,11 @@ function accessToCamera () {
         screenText2.style.display = "none"
         screenTextP2.style.display = "none"
         video.style.display = "block"
-        screenButton1.setAttribute('src', '../assets/paso-a-paso.svg')
-        screenButton2.setAttribute('src', '../assets/paso-a-paso-hover.svg')
+        screenButton1.style.color = "#572EE5"
+        screenButton1.style.backgroundColor = "white"
+        screenButton2.style.color = "white"
+        screenButton2.style.backgroundColor = "#572EE5"
+        recordButton.style.display = "block"
         recorder = RecordRTC(stream, {
             type: 'gif',
             frameRate: 1,
@@ -111,6 +118,7 @@ function accessToCamera () {
     })
 }
 
+// --------------------------------GRABAR GIF--------------------------------------------
 let tiempo = 0
 let timerDiv = document.getElementById('timerDiv')
 let repeat = document.getElementById('repeat')
@@ -126,33 +134,65 @@ recordButton.addEventListener('click', () => {
         let m = parseInt((video.currentTime / 60) % 60);
         timerDiv.innerHTML = '00:'+ m + ':' + s ;
     }
+    recordButton.style.display = "none"
+    finishButton.style.display = "block"
 })
 
+// --------------------------------FINALIZAR GIF--------------------------------------------
 let recordedGif = 0
-
 
 finishButton.addEventListener('click', () => {
     recorder.stopRecording(function() {
-        recordedGif = recorder.getBlob();
+        recordedGif = recorder.getBlob();   //para almacenar el gif en la variable recordedGif
         console.log(recordedGif)
     });
-    video.pause()
+    video.pause()       //para apagar la cámara
     tracks.forEach(function(track) {
         track.stop();
       })
-    clearInterval(tiempo); //para parar la ejecucion del evento automatico
+    clearInterval(tiempo);  //para parar la ejecucion del evento automatico
     timerDiv.style.display= "none"
     repeat.style.display= "block"
+    finishButton.style.display = "none"
+    uploadButton.style.display = "block"
 })
 
+// --------------------------------REPETIR CAPTURA GIF----------------------------------
+
+repeat.addEventListener('click', () => {
+    accessToCamera ()
+    repeat.style.display= "none"
+    uploadButton.style.display = "none"
+})
+
+
+// --------------------------------SUBIR GIF--------------------------------------------
 let form = new FormData()
+let urlPath = "https://upload.giphy.com/v1/gifs"
+let apiKey = "DjElvlwE1GAAFq1RVpDkjCpWZfhT1c1a"
+let uploadedGif = localStorage.getItem('Mis_Gifs') ? JSON.parse(localStorage.getItem('Mis_Gifs')) : []
+
+console.log(uploadedGif)
 
 uploadButton.addEventListener('click', () => {
     form.append('file', recordedGif, 'myGif.gif')
     console.log(form.get('file'))
-    XMLHttpRequest.send(form)
+    
+    uploadGif(form).then(response => {
+        console.log(response.data.id)
+        uploadedGif.push(response.data.id)
+        localStorage.setItem('Mis_Gifs',  JSON.stringify(uploadedGif))
+    }).catch(error => console.error)
+
 })
 
+async function uploadGif (form) {
+    let response = await fetch(`${urlPath}?api_key=${apiKey}`, {
+        method: 'POST',
+        body: form
+    })
+    return response.json()
+}
 
 
 

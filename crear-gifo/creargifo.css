@@ -159,6 +159,9 @@ input.burgerMenu:checked~nav ul.menu-header li span.separate {
 }
 
 /* SECCION CREAR GIFO */
+main {
+    height: 85vh;
+}
 section.crearGifo {
     display: flex;
     justify-content: center;
@@ -199,17 +202,27 @@ section.crearGifo {
     margin: 3%;
     position: relative;
 }
-.button {
-    margin: 0% 5%;
+button {
+    border: 1px solid #572EE5;
+    color: #572EE5;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    border-radius: 25px;
+    width: 127px;
+    height: 50px;
+    margin-left: 50%;
+    margin-top: 2%;
+    transform: translate(-50%);
+    background-color: transparent;
 }
-.buttonHover {
-    display: none;
+.smallButton {
+    width: 32px;
+    height: 32px;
 }
-/* .camera {
-    /* align-self: flex-start; */
-    /* justify-self: flex-start; */
-    /* float: left;
-} */
+.screenButton div {
+    margin: 0% 1%;
+}
+
 .film {
     width: 200px;
     display: flex;
@@ -228,22 +241,15 @@ section.crearGifo {
     transform: translate(-50%);
 }
 
-button {
-    border: 1px solid #572EE5;
-    color: #572EE5;
-    font-family: 'Montserrat';
-    font-weight: bold;
-    border-radius: 25px;
-    width: 127px;
-    height: 50px;
-    margin-left: 50%;
-    margin-top: 2%;
-    transform: translate(-50%);
+.recordButton, .finishButton, .uploadButton{
+    display: none;
 }
-button:hover {
+
+.largeButton:hover {
     color: white;
     background-color: #572EE5;
 }
+
 .timerDiv {
     color: #572EE5;
     font-weight: bold;
