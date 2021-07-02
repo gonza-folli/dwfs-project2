@@ -51,7 +51,7 @@ window.onload = () => {
             imgZoomGifClose.setAttribute('src', '../assets/close.svg')
         }
     }
-
+            // BOTON MENU HAMBURGUESA
     imgBurger.addEventListener('click', () => {
         if (flagBurger == 0 && flag == true){
             imgBurger.setAttribute('src', '../assets/close.svg')
@@ -88,7 +88,7 @@ window.onload = () => {
         else {
             searchResults.style.display= "none"
         }
-
+// ------------  DANDOLE FORMATO AL STRING DEL LOCALSTORAGE PARA INCLUIR EN EL FETCH --------------------------------
     stringOutputId()
 
     function stringOutputId () {
@@ -100,7 +100,7 @@ window.onload = () => {
             }
     }
     console.log(misGifosString)
-
+// -----------------------------------------  FETCH MIS GIFOS ----------------------------------------------------
     async function getMisGifos () {
         let response = await fetch(`${urlPath}?api_key=${apiKey}&ids=${misGifosString}`)
         response = await response.json()
@@ -108,7 +108,7 @@ window.onload = () => {
         return response
     }
 
-    //------------------------------RESOLUCION DE LA PROMESA Y MOSTRAR MAS RESULTADOS----------------------------------------------------------
+    //----------------------------RESOLUCION DE LA PROMESA Y MOSTRAR MAS RESULTADOS----------------------------------------------------------
     getMisGifos().then(
         (response) => {
             renderGif(response, searchResults)
@@ -139,6 +139,7 @@ window.onload = () => {
     async function getTrending () {
         let response = await fetch(`${urlPath}/trending?api_key=${apiKey2}&limit=3&rating=g`)
         response = await response.json()
+        console.log(response)
         return response
     }
     getTrending().then(
@@ -146,7 +147,7 @@ window.onload = () => {
             renderGif(response, scrollSon)
         }
     )
-    //------------------------------RENDERIZAR IMAGENES-----------------------------------------------------------------------------------------
+// ------------------ FUNCION PRINCIPAL DE RENDERIZAR LOS GIF Y SUS BOTONES--------------------------------------------------
     
     function renderGif (response, container) {
         for (let i = 0; i < response.data.length; i++) {
@@ -175,15 +176,18 @@ window.onload = () => {
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
+            checkFavorites(response.data[i], imgFav, imgFav2)
 
             buttonFav.addEventListener('click', () => {
-                // imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
-                // imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
                 console.log(response.data[i].title)
                 if (favoritesGif.includes(response.data[i])) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                    imgFav.setAttribute('src', '../assets/icon-fav.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response.data[i])
+                    imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
@@ -206,4 +210,20 @@ window.onload = () => {
                 zoomGif.style.display = "none"
     })
     
+
+//------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
+    function checkFavorites (gif, imgFav, imgFav2) {
+        for (let i = 0; i < favoritesGif.length; i++) {
+            if (gif.id == favoritesGif[i].id) {
+                imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
+                imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
+                return
+            } else {
+                imgFav.setAttribute('src', '../assets/icon-fav.svg')
+                imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
+            }
+        }
+    }
+
+
 }

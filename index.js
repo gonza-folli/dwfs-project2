@@ -192,7 +192,6 @@ window.onload = () => {
                 separateSearch.style.display= "none"
                 autocomplete.style.display = "none"
                 renderIconSearchBar()
-
             })
         }
         if (inputSearchBar.value == "") {
@@ -200,6 +199,7 @@ window.onload = () => {
             autocomplete.style.display = "none"
         }
     }
+
     //------------- LIMPIAR GIF OBTENIDOS COMO RESULTADOS ----------------------
     function cleanResults () {
         while (searchResults.childNodes.length > 0) {
@@ -221,7 +221,7 @@ window.onload = () => {
         console.log(response)
         renderGif(response, searchResults)
     }
-    
+// ------------------ FUNCION PRINCIPAL DE RENDERIZAR LOS GIF Y SUS BOTONES------------------------
     function renderGif (response, container) {
         for (let i = 0; i < response.data.length; i++) {
             let newDiv = document.createElement('div')
@@ -236,7 +236,7 @@ window.onload = () => {
             newDivHover.classList.add('containerGifSelected')
             newDivHover.innerHTML = 
             `<div class="icons">
-                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="./assets/icon-fav.svg" alt="fav"></button>
+                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="./assets/icon-fav.svg" alt="fav"><img id="imgFav2-${response.data[i].id}" class="imgButtonHover" src="./assets/icon-fav-hover.svg" alt="fav"></button>
                 <button class="icon Des" id="Des-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="./assets/icon-download-hover.svg" alt="des"></button>
                 <button class="icon Zoom" id="Zoom-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-max-normal.svg" alt="max"><img class="imgButtonHover" src="./assets/icon-max-hover.svg" alt="max"></button>
             </div>
@@ -248,17 +248,19 @@ window.onload = () => {
 
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
-
-            checkFavorites(response.data[i], imgFav)
+            let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
+            checkFavorites(response.data[i], imgFav, imgFav2)
 
             buttonFav.addEventListener('click', () => {
-                imgFav.setAttribute('src', './assets/icon-fav-active.svg')
-                // checkFavorites(response.data[i], imgFav)
                 console.log(response.data[i].title)
                 if (favoritesGif.includes(response.data[i])) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                    imgFav.setAttribute('src', './assets/icon-fav.svg')
+                    imgFav2.setAttribute('src', './assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response.data[i])
+                    imgFav.setAttribute('src', './assets/icon-fav-active.svg')
+                    imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
                 })
@@ -273,7 +275,7 @@ window.onload = () => {
             })
         }
     }
-    
+// ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
     let zoomGifClose = document.getElementById('zoomGifClose')
         zoomGif.addEventListener('click', () => {
                 while (zoomGif.childNodes.length > 2) {
@@ -313,13 +315,15 @@ window.onload = () => {
 
 
 //------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
-    function checkFavorites (gif, imgFav) {
+    function checkFavorites (gif, imgFav, imgFav2) {
         for (let i = 0; i < favoritesGif.length; i++) {
             if (gif.id == favoritesGif[i].id) {
                 imgFav.setAttribute('src', './assets/icon-fav-active.svg')
+                imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
                 return
             } else {
                 imgFav.setAttribute('src', './assets/icon-fav.svg')
+                imgFav2.setAttribute('src', './assets/icon-fav-hover.svg')
             }
         }
     }

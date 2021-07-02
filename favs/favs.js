@@ -12,7 +12,7 @@ window.onload = () => {
     let flag = localStorage.getItem("Nocturne Mode") ? JSON.parse(localStorage.getItem("Nocturne Mode")) : true
     let flagBurger = 0
 
-    //------------------------------MODO NOCTURNO------------------------------------------------
+//-------------------------------------------MODO NOCTURNO------------------------------------------------
     if (flag == false) {
         body[0].classList.add('night')
         nightImgRender ()
@@ -52,7 +52,7 @@ window.onload = () => {
             imgZoomGifClose.setAttribute('src', '../assets/close.svg')
         }
     }
-
+            // BOTON MENU HAMBURGUESA
     imgBurger.addEventListener('click', () => {
         if (flagBurger == 0 && flag == true){
             imgBurger.setAttribute('src', '../assets/close.svg')
@@ -69,15 +69,14 @@ window.onload = () => {
                 }
     )
 
-    
-    //------------------------------GET FAVOURITES------------------------------------------------
+//-------------------------------------------GET FAVOURITES------------------------------------------------
     let favoritesGif = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : []
     let searchResults = document.getElementById('searchResults')
     let resultsIcon = document.getElementById('resultsIcon')
     let resultsText = document.getElementById('resultsText')
     let moreResults = document.getElementById('moreResults')
-    
 
+// ------------------ FUNCION PRINCIPAL DE RENDERIZAR LOS FAVORITOS Y SUS BOTONES------------------------
     function renderFavorites (response, container) {
         for (let i = 0; i < response.length; i++) {
             let newDiv = document.createElement('div')
@@ -101,15 +100,25 @@ window.onload = () => {
                 <span>${response[i].title}</span>
             </div>`
             newDiv.appendChild(newDivHover)
+
             let buttonFav = document.getElementById(`Fav-stored-${response[i].id}`)
+            let imgFav = document.getElementById(`imgFav-${response[i].id}`)
+            let imgFav2 = document.getElementById(`imgFav2-${response[i].id}`)
+            checkFavorites(response[i], imgFav, imgFav2)
+
             buttonFav.addEventListener('click', () => {
                 if (favoritesGif.includes(response[i])) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response[i].id})
+                    imgFav.setAttribute('src', '../assets/icon-fav.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response[i])
+                    imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
+
             let buttonZoom = document.getElementById(`Zoom-stored-${response[i].id}`)
             buttonZoom.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
@@ -131,7 +140,7 @@ window.onload = () => {
         moreResults.style.display = "block"
     }
 
-    //------------------------------MAS RESULTADOS------------------------------------------------
+//------------------------------MAS RESULTADOS------------------------------------------------
     let containerGif = document.querySelectorAll('.containerGif')
     let indexFinal = 12
 
@@ -188,7 +197,7 @@ window.onload = () => {
             newDivHover.classList.add('containerGifSelected')
             newDivHover.innerHTML = 
             `<div class="icons">
-                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="../assets/icon-fav.svg" alt="fav"><img id="imgFav2-${response.data[i].id}" class="imgButtonHover" src="../assets/icon-fav-hover.svg" alt="fav"></button>
+                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFavTrend-${response.data[i].id}" class="imgButton" src="../assets/icon-fav.svg" alt="fav"><img id="imgFavTrend2-${response.data[i].id}" class="imgButtonHover" src="../assets/icon-fav-hover.svg" alt="fav"></button>
                 <button class="icon Des" id="Des-${response.data[i].id}" type="button"><img class="imgButton" src="../assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="../assets/icon-download-hover.svg" alt="des"></button>
                 <button class="icon Zoom" id="Zoom-${response.data[i].id}" type="button"><img class="imgButton" src="../assets/icon-max-normal.svg" alt="max"><img class="imgButtonHover" src="../assets/icon-max-hover.svg" alt="max"></button>
             </div>
@@ -200,17 +209,20 @@ window.onload = () => {
 
 
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
-            let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
-            let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
+            let imgFav = document.getElementById(`imgFavTrend-${response.data[i].id}`)
+            let imgFav2 = document.getElementById(`imgFavTrend2-${response.data[i].id}`)
+            checkFavorites(response.data[i], imgFav, imgFav2)
 
             buttonFav.addEventListener('click', () => {
-                // imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
-                // imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
                 console.log(response.data[i].title)
                 if (favoritesGif.includes(response.data[i])) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                    imgFav.setAttribute('src', '../assets/icon-fav.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response.data[i])
+                    imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
                 })
@@ -235,6 +247,19 @@ window.onload = () => {
                 zoomGif.style.display = "none"
     })
 
+//------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
+    function checkFavorites (gif, imgFav, imgFav2) {
+        for (let i = 0; i < favoritesGif.length; i++) {
+            if (gif.id == favoritesGif[i].id) {
+                imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
+                imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
+                return
+            } else {
+                imgFav.setAttribute('src', '../assets/icon-fav.svg')
+                imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
+            }
+        }
+    }
 
 
 }
