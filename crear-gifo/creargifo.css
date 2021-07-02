@@ -37,7 +37,7 @@ header .logo .logomobile {
 }
 
 header nav {
-    width: 70%;
+    width: 73%;
 }
 header ul.menu-header {
     display: flex;
@@ -161,7 +161,7 @@ input.burgerMenu:checked~nav ul.menu-header li span.separate {
 /* SECCION CREAR GIFO */
 
 main {
-    height: 85vh;
+    height: 80vh;
 }
 section.crearGifo {
     display: flex;
@@ -179,8 +179,11 @@ section.crearGifo {
 }
 .screen {
     width: 47.8vw;
+    width: 60vw;
+    max-width: 688px;
+    /* padding-top: 56.25%; */
     height: 390px;
-    border: #572EE5 1px solid; 
+    border: #572EE5 1px solid;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -189,13 +192,75 @@ section.crearGifo {
 .screenText2, .screenTextP2 {
     display: none;
 }
+/* ------------- SECCION DE LA PANTALLA DEL VIDEO ---------------- */
+.videoContainer {
+    width: 80%;
+    margin: 10% 0;
+    display: none;
+    position: relative;
+}
 .video {
     width: 100%;
-    height: 100%;
-    z-index: 5;
-    display: none;
-    object-fit: cover;
+    max-width: 600px;
+    /* height: 85%; */
+    /* display: none; */
+    /* object-fit: cover; */
+    /* margin: 10% 0; */
 }
+.videoHover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(54, 6, 228, 0.5);
+    top: 0;
+    left: 0;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+/* .videoHover img {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+} */
+
+.videoHover h3 {
+    font-size: 15px;
+    color: white;
+    text-align: center;
+}
+/* ------------------- HOVER ICONOS -------------------------- */
+.containerGifSelected .imgButtonHover {
+    display: none;
+}
+.containerGifSelected button:hover .imgButtonHover {
+    display: block;
+}
+.containerGifSelected button:hover .imgButton {
+    display: none;
+}
+.containerGifSelected {
+    position: absolute;
+    top: 10px;
+    right: 2%;
+}
+
+.containerGifSelected button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    margin: 0px 5px 0px 5px;
+    transform: translate(0%);
+}
+.containerGifSelected img{
+    width: 32px;
+    height: 32px;
+}
+
 .screenButton {
     display: flex;
     justify-content: center;
@@ -267,7 +332,18 @@ button {
     display: none;
 }
 
-
+@media screen and (max-width: 768px) {
+    .divCamera {
+        display: none;
+    }
+    .film {
+        display: none;
+    }
+    .screen {
+        width: 65vw;
+        min-width: 300px;
+    }
+}
 
 
 
@@ -387,9 +463,15 @@ body.night button {
     border: 1px solid white;
     color: white;
 }
-body.night button:hover {
+body.night .largeButton:hover {
         color: white;
         background-color: #572EE5;
         border: 1px solid #572EE5;
 }
 
+body.night .screen {
+    border: white 1px solid;
+} 
+body.night .midLine {
+    background-color: white;
+} 

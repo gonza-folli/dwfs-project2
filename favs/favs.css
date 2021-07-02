@@ -38,7 +38,7 @@ header .logo .logomobile {
 }
 
 header nav {
-    width: 70%;
+    width: 73%;
 }
 header ul.menu-header {
     display: flex;
@@ -183,13 +183,15 @@ h2.resultsText {
 }
 div.searchResults {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    margin: 4% 8%;
+    width: 100%;
+    margin: 4% 0%;
+    padding: 0% 8%;
 }
 div.searchResults .containerGif {
-    margin-top: 2%;
+    margin: 1% 2%;
     width: 260px;
     height: 200px;
     position: relative;
@@ -216,18 +218,23 @@ button.moreResults:hover img.moreResultsIconHover {
 button.moreResults:hover img.moreResultsIcon {
     display: none;
 }
-
+@media screen and (max-width: 1500px) {
+    div.searchResults {
+        padding: 0% 5%;
+    }
+}
 @media screen and (max-width: 768px) {
     div.searchResults {
-        margin: 10% 5%;
+        margin: 10% 0%;
+        padding: 0% 3%;
     }
+}
+@media screen and (max-width: 595px) {
     div.searchResults .containerGif {
         width: 156px;
         height: 120px;
     }
 }
-
-
 
 /* SECCION TRENDING GIFOS */
 section.trending-gifos {
@@ -253,7 +260,7 @@ section.trending-gifos .scroll-father {
 section.trending-gifos .scroll-son {
     display: flex;
     justify-content: center;
-    width: 90%;
+    width: 1194px;
     /* flex-wrap: wrap; */
 }
 
@@ -265,7 +272,7 @@ section.trending-gifos .scroll-son .containerGif{
     position: relative;
 }
 
- /* --------------- HOVER SCROLL LEFT RIGHT ----------------------*/
+/* --------------- HOVER SCROLL LEFT RIGHT ----------------------*/
 div.scrollLeft img.buttonLeftHover {
     display: none;
 }
@@ -287,7 +294,7 @@ div.scrollRight:hover img.buttonRight {
 }
 
 
- /* --------------- HOVER IMAGENES ----------------------*/
+/* --------------- HOVER IMAGENES ----------------------*/
 
 .containerGif div.containerGifSelected {
     display: none;
@@ -346,7 +353,11 @@ div.scrollRight:hover img.buttonRight {
     font-family: 'Roboto';
     font-weight: bold;
 }
-
+@media screen and (max-width: 1326px) {
+    section.trending-gifos .scroll-son {
+        width: 90%;
+    }
+}
 @media screen and (max-width: 768px) {
     section.trending-gifos {
         height: auto;

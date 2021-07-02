@@ -6,6 +6,9 @@ window.onload = () => {
     let imgLogoMobile = document.getElementById('logomobile')
     let imgBurger = document.getElementById('burger')
     let imgIconSearch = document.getElementById('icon-search')
+    let imgIconSearch2 = document.getElementById('icon-search2')
+    let ImgIconSearchClose = document.getElementById('icon-search-close')
+    let iconSuggestedSearch = document.querySelectorAll('.iconSuggestedSearch')
     let imgMoreResultsIcon = document.getElementById('moreResultsIcon')
     let buttonLeft = document.getElementById('buttonLeft')
     let buttonRight = document.getElementById('buttonRight')
@@ -31,7 +34,7 @@ window.onload = () => {
         if (flag == false) {
         night.innerHTML = "MODO DIURNO"} else {night.innerHTML = "MODO NOCTURNO"}
     })
-      
+    
         // FUNCION RENDERIZAR TAG
     function nightTagRender () {
         body[0].classList.toggle('night')
@@ -42,20 +45,30 @@ window.onload = () => {
         imgLogoDesktop.setAttribute('src', './assets/Logo-modo-noc.svg')
         imgLogoMobile.setAttribute('src', './assets/logo-mobile-modo-noct.svg')
         imgIconSearch.setAttribute('src', './assets/icon-search-modo-noct.svg')
+        imgIconSearch2.setAttribute('src', './assets/icon-search-modo-noct.svg')
+        ImgIconSearchClose.setAttribute('src', './assets/close-modo-noct.svg')
         imgBurger.setAttribute('src', './assets/close-modo-noct.svg')
         imgMoreResultsIcon.setAttribute('src', './assets/CTA-ver+-modo-noc.svg')
         buttonLeft.setAttribute('src', './assets/button-slider-left-md-noct.svg')
         buttonRight.setAttribute('src', './assets/button-slider-right-md-noct.svg')
         imgZoomGifClose.setAttribute('src', './assets/close-modo-noct.svg')
+        for (let i = 0; i < iconSuggestedSearch.length; i++) {
+            iconSuggestedSearch[i].setAttribute('src', './assets/icon-search-modo-noct.svg')
+        }
         } else {
             imgLogoDesktop.setAttribute('src', './assets/logo-desktop.svg')
             imgLogoMobile.setAttribute('src', './assets/logo-mobile.svg')
             imgIconSearch.setAttribute('src', './assets/icon-search.svg')
+            imgIconSearch2.setAttribute('src', './assets/icon-search.svg')
+            ImgIconSearchClose.setAttribute('src', './assets/close.svg')
             imgBurger.setAttribute('src', './assets/close.svg')
             imgMoreResultsIcon.setAttribute('src', './assets/CTA-ver-mas.svg')
             buttonLeft.setAttribute('src', './assets/button-slider-left.svg')
             buttonRight.setAttribute('src', './assets/Button-Slider-right.svg')
             imgZoomGifClose.setAttribute('src', './assets/close.svg')
+            for (let i = 0; i < iconSuggestedSearch.length; i++) {
+                iconSuggestedSearch[i].setAttribute('src', './assets/icon-search.svg')
+            }
         }
     }
 
@@ -95,7 +108,19 @@ window.onload = () => {
     let favoritesGif = localStorage.getItem("favorites") ? JSON.parse(localStorage.getItem("favorites")) : []
     let zoomGif = document.getElementById('zoomGif')
 
+    // ------------- BUSCADOR CON EL "CLICK"  ( tengo 2 lupas)------------------
     imgIconSearch.addEventListener('click', () =>{
+        if (inputSearchBar.value !== "") {
+        cleanResults()
+        trendingHome.style.display = "none"
+        searchBar = document.getElementById('searchBar').value
+        console.log(searchBar)
+        renderSearchTitle(searchBar)
+        searchGifos(searchBar)
+        inputSearchBar.value = ""
+        }
+    })
+    imgIconSearch2.addEventListener('click', () =>{
         cleanResults()
         trendingHome.style.display = "none"
         searchBar = document.getElementById('searchBar').value
@@ -104,9 +129,11 @@ window.onload = () => {
         searchGifos(searchBar)
         inputSearchBar.value = ""
     })
+    // ------------- BUSCADOR CON EL "TECLADO" AUTOCOMPLETAR ------------------
     inputSearchBar.addEventListener('keyup', (e) => {
         searchBar = document.getElementById('searchBar').value
         console.log(searchBar)
+        renderIconSearchBar ()
         autocompleteSearch (searchBar)
         if (e.keyCode === 13 && searchBar !== "") {
             cleanResults()
@@ -116,6 +143,30 @@ window.onload = () => {
             inputSearchBar.value = ""
         }
     })
+    // -----------------RENDERIZAR BOTONES BUSQUEDA-CIERRE DE LA SEARCH BAR-----------------
+    function renderIconSearchBar () {
+        if (inputSearchBar.value == "") {
+            inputSearchBar.style.padding = "0 0 0 3.8%"
+            imgIconSearch2.style.display = "none"
+            ImgIconSearchClose.style.display= "none"
+            imgIconSearch.style.display = "block"
+        } else {
+            inputSearchBar.style.padding = "0 0 0 9%"
+            imgIconSearch2.style.display = "block"
+            ImgIconSearchClose.style.display= "block"
+            imgIconSearch.style.display = "none"
+        }
+    }
+
+    // -----------------BOTON CIERRE PARA LIMPIAR BUSCARDOR-----------------
+    ImgIconSearchClose.addEventListener('click', () => {
+        inputSearchBar.value = ""
+        separateSearch.style.display= "none"
+        autocomplete.style.display = "none"
+        ImgIconSearchClose.style.display = "none"
+        imgIconSearch.style.display = "block"
+    })
+
     // -----------    AUTOCOMPLETAR CON SUGERIDOS---------------------------------
     async function autocompleteSearch (searchBar) {
         let response = await fetch(`${urlPath}/search/tags?api_key=${apiKey}&q=${searchBar}&limit=4&offset=0&rating=g&lang=en`)
@@ -124,6 +175,8 @@ window.onload = () => {
     }
 
     let li = document.querySelectorAll('.autoc')
+    let liSpan = document.querySelectorAll('.autocSpan')
+    let selectedLi = 0
 
     function renderAutocompleteSearch (response) {
         separateSearch.style.display= "block"
@@ -131,12 +184,15 @@ window.onload = () => {
         for (let i = 0; i < response.data.length; i++) {
             li[i].style.display= "block"
             li[i].setAttribute('id', `result${i}`)
-            li[i].innerHTML = `<img src="./assets/icon-search.svg" alt="suggestedSearch" class="iconSuggestedSearch">${response.data[i].name}`
+            liSpan[i].innerHTML = `${response.data[i].name}`
             li[i].addEventListener('click', () => {
-                let selectedLi = li[i].textContent
+                selectedLi = li[i].textContent
+                console.log(selectedLi)
                 inputSearchBar.value = selectedLi
                 separateSearch.style.display= "none"
                 autocomplete.style.display = "none"
+                renderIconSearchBar()
+
             })
         }
         if (inputSearchBar.value == "") {
@@ -180,24 +236,24 @@ window.onload = () => {
             newDivHover.classList.add('containerGifSelected')
             newDivHover.innerHTML = 
             `<div class="icons">
-                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="./assets/icon-fav.svg" alt="fav"><img id="imgFav2-${response.data[i].id}" class="imgButtonHover" src="./assets/icon-fav-hover.svg" alt="fav"></button>
+                <button class="icon Fav" id="Fav-${response.data[i].id}" type="button"><img id="imgFav-${response.data[i].id}" class="imgButton" src="./assets/icon-fav.svg" alt="fav"></button>
                 <button class="icon Des" id="Des-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="./assets/icon-download-hover.svg" alt="des"></button>
                 <button class="icon Zoom" id="Zoom-${response.data[i].id}" type="button"><img class="imgButton" src="./assets/icon-max-normal.svg" alt="max"><img class="imgButtonHover" src="./assets/icon-max-hover.svg" alt="max"></button>
             </div>
             <div class="text">
-                <span>User</span>
+                <span>${response.data[i].username}</span>
                 <span>${response.data[i].title}</span>
             </div>`
             newDiv.appendChild(newDivHover)
 
-
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
-            let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
+
+            checkFavorites(response.data[i], imgFav)
 
             buttonFav.addEventListener('click', () => {
                 imgFav.setAttribute('src', './assets/icon-fav-active.svg')
-                imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
+                // checkFavorites(response.data[i], imgFav)
                 console.log(response.data[i].title)
                 if (favoritesGif.includes(response.data[i])) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
@@ -254,4 +310,19 @@ window.onload = () => {
         trendingHome.appendChild(newItem)
     }
     
+
+
+//------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
+    function checkFavorites (gif, imgFav) {
+        for (let i = 0; i < favoritesGif.length; i++) {
+            if (gif.id == favoritesGif[i].id) {
+                imgFav.setAttribute('src', './assets/icon-fav-active.svg')
+                return
+            } else {
+                imgFav.setAttribute('src', './assets/icon-fav.svg')
+            }
+        }
+    }
+
+
 }

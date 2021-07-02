@@ -24,7 +24,7 @@
             <ul class="menu-header">
                 <li><a href="#" class="modo-nocturno" id="modo-nocturno">MODO NOCTURNO</a><span class="separate"></span></li>
                 <li><a href="../favs/favs.html">FAVORITOS</a><span class="separate"></span></li>
-                <li><a href="">MIS GIFOS</a><span class="separate"></span></li>
+                <li><a href="../mis-gifos/misgifos.html">MIS GIFOS</a><span class="separate"></span></li>
                 <li class="buttonCrearGifo"><a href="#"><img src="../assets/CTA-crear-gifo-active.svg" alt=""></a></li>
             </ul>
         </nav>
@@ -32,18 +32,25 @@
     <main>
         <section class="crearGifo">
             <div class="divCamera">
-                <img src="../assets/camara.svg" alt="camera" class="camera">
+                <img src="../assets/camara.svg" alt="camera" class="camera" id="camera">
                 <img class="cameraLight" src="../assets/element-luz-camara.svg" alt="">
             </div>
             <div>
-                <div class="screen">
+                <div id="screen" class="screen">
                     <h2 id="screenText">Aquí podrás </br>crear tus propios <span style="color:#5ED7C6;">GIFOS</style></h2>
                     <p id="screenTextP">¡Crea tu GIFO en sólo 3 pasos! </br>(sólo necesitas una cámara para grabar un video)</p>
                     <h2 class="screenText2" id="screenText2">¿Nos das acceso</br> a tu cámara?</h2>
                     <p class="screenTextP2" id="screenTextP2">El acceso a tu camara será válido sólo</br> por el tiempo en el que estés creando el GIFO.</p>
-                    <video id="video" class="video"></video>
 
+                    <div id="videoContainer" class="videoContainer">
+                        <video id="video" class="video"></video>
+                        <div id="videoHover" class="videoHover">
+                            <img id="imgLoader" src="../assets/loader.svg" alt="">
+                            <h3 id="videoHoverText">Estamos subiendo tu GIFO</h3>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="screenButton">
                     <div>
                         <button id="screenButton1" class="smallButton" type="button">1</button>
@@ -59,7 +66,7 @@
                 </div>
             </div>
             <div class="film">
-                <img class="filmIco" src="../assets/pelicula.svg" alt="">
+                <img class="filmIco" id="filmIco" src="../assets/pelicula.svg" alt="">
             </div>
         </section>
         <span class="midLine"></span>

@@ -12,15 +12,14 @@ window.onload = () => {
     let flag = localStorage.getItem("Nocturne Mode") ? JSON.parse(localStorage.getItem("Nocturne Mode")) : true
     let flagBurger = 0
 
-    //------------------------------MODO NOCTURNO------------------------------------------------
+    //------------------------------MODO NOCTURNO--------------------------------------------------------------------------------
     if (flag == false) {
         body[0].classList.add('night')
         nightImgRender ()
         night.innerHTML = "MODO DIURNO"}
         else {night.innerHTML = "MODO NOCTURNO"
     }
-
-            // BOTON ACTIVAR MODO NOCTURNO
+    // BOTON ACTIVAR MODO NOCTURNO
     night.addEventListener('click', () => {
         flag = !flag
         localStorage.setItem('Nocturne Mode', flag)
@@ -29,11 +28,11 @@ window.onload = () => {
         if (flag == false) {
         night.innerHTML = "MODO DIURNO"} else {night.innerHTML = "MODO NOCTURNO"}
     })
-            // FUNCION RENDERIZAR TAG
+    // FUNCION RENDERIZAR TAG
     function nightTagRender () {
         body[0].classList.toggle('night')
     }
-            // FUNCION RENDERIZAR IMAGENES
+    // FUNCION RENDERIZAR IMAGENES
     function nightImgRender () {
         if (flag == false) {
         imgLogoDesktop.setAttribute('src', '../assets/Logo-modo-noc.svg')
@@ -68,76 +67,56 @@ window.onload = () => {
                         return flagBurger = 1}
                 }
     )
-
-    
-    //------------------------------GET FAVOURITES------------------------------------------------
+    //------------------------------GET MISGIFOS------------------------------------------------------------------------------
     let favoritesGif = localStorage.getItem('favorites') ? JSON.parse(localStorage.getItem('favorites')) : []
+    let misGifos = localStorage.getItem('Mis_Gifs') ? JSON.parse(localStorage.getItem('Mis_Gifs')) : []
+    let misGifosString = localStorage.getItem('Mis_Gifs')
     let searchResults = document.getElementById('searchResults')
     let resultsIcon = document.getElementById('resultsIcon')
     let resultsText = document.getElementById('resultsText')
-    let moreResults = document.getElementById('moreResults')
+    let urlPath = "https://api.giphy.com/v1/gifs"
+    let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
+    let apiKey2 = "DjElvlwE1GAAFq1RVpDkjCpWZfhT1c1a"
+    let containerGif = 0
     
+    console.log(misGifos)
 
-    function renderFavorites (response, container) {
-        for (let i = 0; i < response.length; i++) {
-            let newDiv = document.createElement('div')
-            newDiv.classList.add('containerGif')
-            container.appendChild(newDiv)
-            let newItem = document.createElement('img')
-            newItem.setAttribute('src', `${response[i].images['original'].url}`)
-            newItem.setAttribute('class', `img`)
-            newItem.setAttribute('id', `img${[i]}`)
-            newDiv.appendChild(newItem)
-            let newDivHover = document.createElement('div')
-            newDivHover.classList.add('containerGifSelected')
-            newDivHover.innerHTML = 
-            `<div class="icons">
-                <button class="icon Fav" id="Fav-stored-${response[i].id}" type="button"><img id="imgFav-${response[i].id}" class="imgButton" src="../assets/icon-fav.svg" alt="fav"><img id="imgFav2-${response[i].id}" class="imgButtonHover" src="../assets/icon-fav-hover.svg" alt="fav"></button>
-                <button class="icon Des" id="Des-stored-${response[i].id}" type="button"><img class="imgButton" src="../assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="../assets/icon-download-hover.svg" alt="des"></button>
-                <button class="icon Zoom" id="Zoom-stored-${response[i].id}" type="button"><img class="imgButton" src="../assets/icon-max-normal.svg" alt="max"><img class="imgButtonHover" src="../assets/icon-max-hover.svg" alt="max"></button>
-            </div>
-            <div class="text">
-                <span>${response[i].username}</span>
-                <span>${response[i].title}</span>
-            </div>`
-            newDiv.appendChild(newDivHover)
-            let buttonFav = document.getElementById(`Fav-stored-${response[i].id}`)
-            buttonFav.addEventListener('click', () => {
-                if (favoritesGif.includes(response[i])) {
-                    favoritesGif = favoritesGif.filter(function (x) {return x.id != response[i].id})
-                } else {
-                    favoritesGif.push(response[i])
-                }
-                localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-            })
-            let buttonZoom = document.getElementById(`Zoom-stored-${response[i].id}`)
-            buttonZoom.addEventListener('click', () => {
-                let clone = newItem.cloneNode(true)
-                let clone2 = newDivHover.cloneNode(true)
-                zoomGif.appendChild(clone)
-                zoomGif.appendChild(clone2)
-                zoomGif.style.display = "flex"
-            })
+    if (misGifos !== []) {
+        resultsIcon.style.display= "none"
+        resultsText.style.display= "none"
+        } 
+        else {
+            searchResults.style.display= "none"
         }
+
+    stringOutputId()
+
+    function stringOutputId () {
+        if (misGifosString !== null) {
+            misGifosString = misGifosString.replace(/"/g, '')
+            misGifosString = misGifosString.replace("[", '')
+            misGifosString = misGifosString.replace("]", '')
+            return misGifosString
+            }
+    }
+    console.log(misGifosString)
+
+    async function getMisGifos () {
+        let response = await fetch(`${urlPath}?api_key=${apiKey}&ids=${misGifosString}`)
+        response = await response.json()
+        console.log(response)
+        return response
     }
 
-    if (favoritesGif.length > 0) {
-        renderFavorites(favoritesGif, searchResults)
-        resultsIcon.style.display = "none"
-        resultsText.style.display = "none"
-    }
-    
-    if (favoritesGif.length > 12) {
-        moreResults.style.display = "block"
-    }
+    //------------------------------RESOLUCION DE LA PROMESA Y MOSTRAR MAS RESULTADOS----------------------------------------------------------
+    getMisGifos().then(
+        (response) => {
+            renderGif(response, searchResults)
+            containerGif = document.querySelectorAll('.containerGif')   
+            renderMoreResults()
+    })
 
-    //------------------------------MAS RESULTADOS------------------------------------------------
-    let containerGif = document.querySelectorAll('.containerGif')
     let indexFinal = 12
-
-    console.log(containerGif)
-
-    renderMoreResults()
 
     function renderMoreResults() {
         if (indexFinal > containerGif.length) {
@@ -153,12 +132,7 @@ window.onload = () => {
         renderMoreResults()
     })
 
-
-    //------------------------------FETCH TRENDING------------------------------------------------
-    
-    let urlPath = "https://api.giphy.com/v1/gifs"
-    let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
-    let apiKey2 = "DjElvlwE1GAAFq1RVpDkjCpWZfhT1c1a"
+    //------------------------------FETCH TRENDING------------------------------------------------------------------------------------------
 
     let scrollSon = document.getElementById('scroll-son')
 
@@ -172,7 +146,7 @@ window.onload = () => {
             renderGif(response, scrollSon)
         }
     )
-    //------------------------------RENDERIZAR IMAGENES------------------------------------------------
+    //------------------------------RENDERIZAR IMAGENES-----------------------------------------------------------------------------------------
     
     function renderGif (response, container) {
         for (let i = 0; i < response.data.length; i++) {
@@ -198,7 +172,6 @@ window.onload = () => {
             </div>`
             newDiv.appendChild(newDivHover)
 
-
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
@@ -213,9 +186,7 @@ window.onload = () => {
                     favoritesGif.push(response.data[i])
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-                })
-
-            
+            })
             let buttonZoomTrending = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoomTrending.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
@@ -234,7 +205,5 @@ window.onload = () => {
                 }
                 zoomGif.style.display = "none"
     })
-
-
-
+    
 }
