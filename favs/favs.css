@@ -116,6 +116,17 @@ h2 {
         font-size: 20px;
     }
 }
+/* ----------------------------------HOVER MENU -----------------------------------------*/
+header .menu-header li a.favs {
+    color: #9CAFC3;
+}
+.menu-header a:hover{
+    text-decoration-color: #5ED7C6;
+    text-decoration-thickness: 3px;
+    text-decoration-line: underline;
+    
+}
+
 /* MENU HAMBURGUESA ACTIVADO */
 input.burgerMenu:checked~nav{
     background-color: #572EE5;
@@ -321,10 +332,7 @@ div.scrollRight:hover img.buttonRight {
     outline: none;
     border: none;
 }
-/* section.trending-gifos .scroll-son .containerGif .containerGifSelected .icons .icon img{
-    width: 32px;
-    height: 32px;
-} */
+
 
 /* ------------------- HOVER ICONOS -------------------------- */
 .containerGifSelected .imgButtonHover {
@@ -336,7 +344,17 @@ div.scrollRight:hover img.buttonRight {
 .containerGifSelected button:hover .imgButton {
     display: none;
 }
-
+.Fav {
+    position: relative;
+}
+/* .Fav .imgButtonHover {
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    transform: translate(-50%);
+    width: 20px;
+    height: 18px;
+} */
 
 .containerGif .containerGifSelected .icons .icon img{
     width: 32px;

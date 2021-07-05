@@ -114,26 +114,27 @@ window.onload = () => {
         cleanResults()
         trendingHome.style.display = "none"
         searchBar = document.getElementById('searchBar').value
-        console.log(searchBar)
         renderSearchTitle(searchBar)
         searchGifos(searchBar)
         inputSearchBar.value = ""
+        renderIconSearchBar()
         }
     })
     imgIconSearch2.addEventListener('click', () =>{
         cleanResults()
         trendingHome.style.display = "none"
         searchBar = document.getElementById('searchBar').value
-        console.log(searchBar)
         renderSearchTitle(searchBar)
         searchGifos(searchBar)
         inputSearchBar.value = ""
+        renderIconSearchBar()
+        separateSearch.style.display= "none"
+        autocomplete.style.display = "none"
     })
     // ------------- BUSCADOR CON EL "TECLADO" AUTOCOMPLETAR ------------------
     inputSearchBar.addEventListener('keyup', (e) => {
         searchBar = document.getElementById('searchBar').value
-        console.log(searchBar)
-        renderIconSearchBar ()
+        renderIconSearchBar()
         autocompleteSearch (searchBar)
         if (e.keyCode === 13 && searchBar !== "") {
             cleanResults()
@@ -141,6 +142,7 @@ window.onload = () => {
             renderSearchTitle(searchBar)
             searchGifos(searchBar)
             inputSearchBar.value = ""
+            renderIconSearchBar()
         }
     })
     // -----------------RENDERIZAR BOTONES BUSQUEDA-CIERRE DE LA SEARCH BAR-----------------
@@ -259,8 +261,8 @@ window.onload = () => {
                     imgFav2.setAttribute('src', './assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response.data[i])
-                    imgFav.setAttribute('src', './assets/icon-fav-active.svg')
-                    imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
+                    imgFav.setAttribute('src', './assets/icon-fav-activev2.svg')
+                    imgFav2.setAttribute('src', './assets/icon-fav-activev2.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
                 })
@@ -276,13 +278,12 @@ window.onload = () => {
         }
     }
 // ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
-    let zoomGifClose = document.getElementById('zoomGifClose')
-        zoomGif.addEventListener('click', () => {
-                while (zoomGif.childNodes.length > 2) {
-                    zoomGif.removeChild(zoomGif.lastChild);
-                }
-                zoomGif.style.display = "none"
-    })
+    imgZoomGifClose.addEventListener('click', () => {
+            while (zoomGif.childNodes.length > 2) {
+                zoomGif.removeChild(zoomGif.lastChild);
+            }
+            zoomGif.style.display = "none"
+    })  
 
 //------------------------------MAS RESULTADOS------------------------------------------------
 
@@ -318,8 +319,8 @@ window.onload = () => {
     function checkFavorites (gif, imgFav, imgFav2) {
         for (let i = 0; i < favoritesGif.length; i++) {
             if (gif.id == favoritesGif[i].id) {
-                imgFav.setAttribute('src', './assets/icon-fav-active.svg')
-                imgFav2.setAttribute('src', './assets/icon-fav-active.svg')
+                imgFav.setAttribute('src', './assets/icon-fav-activev2.svg')
+                imgFav2.setAttribute('src', './assets/icon-fav-activev2.svg')
                 return
             } else {
                 imgFav.setAttribute('src', './assets/icon-fav.svg')

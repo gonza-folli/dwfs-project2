@@ -186,8 +186,8 @@ window.onload = () => {
                     imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
                 } else {
                     favoritesGif.push(response.data[i])
-                    imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
-                    imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
+                    imgFav.setAttribute('src', '../assets/icon-fav-activev2.svg')
+                    imgFav2.setAttribute('src', '../assets/icon-fav-activev2.svg')
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
@@ -215,8 +215,8 @@ window.onload = () => {
     function checkFavorites (gif, imgFav, imgFav2) {
         for (let i = 0; i < favoritesGif.length; i++) {
             if (gif.id == favoritesGif[i].id) {
-                imgFav.setAttribute('src', '../assets/icon-fav-active.svg')
-                imgFav2.setAttribute('src', '../assets/icon-fav-active.svg')
+                imgFav.setAttribute('src', '../assets/icon-fav-activev2.svg')
+                imgFav2.setAttribute('src', '../assets/icon-fav-activev2.svg')
                 return
             } else {
                 imgFav.setAttribute('src', '../assets/icon-fav.svg')

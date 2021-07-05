@@ -99,8 +99,6 @@ h2 {
     }
     header nav {
         display: none;
-        /* position: absolute;
-        left: 100%; */
     }
     h1 {
         font-size: 25px;
@@ -116,6 +114,17 @@ h2 {
         font-size: 20px;
     }
 }
+/* ----------------------------------HOVER MENU -----------------------------------------*/
+header .menu-header li a.misGifosHeader {
+    color: #9CAFC3;
+}
+.menu-header a:hover{
+    text-decoration-color: #5ED7C6;
+    text-decoration-thickness: 3px;
+    text-decoration-line: underline;
+    
+}
+
 /* MENU HAMBURGUESA ACTIVADO */
 input.burgerMenu:checked~nav{
     background-color: #572EE5;
@@ -518,7 +527,6 @@ section.zoomGif .containerGifSelected .text {
 section.zoomGif .containerGifSelected .text span {
     margin-top: 2%;
 }
-
 @media screen and (max-width: 768px) {
     section.zoomGif>img {
         max-width: 70%;
