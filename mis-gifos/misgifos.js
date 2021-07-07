@@ -99,7 +99,7 @@ window.onload = () => {
             return misGifosString
             }
     }
-    console.log(misGifosString)
+
 // -----------------------------------------  FETCH MIS GIFOS ----------------------------------------------------
     async function getMisGifos () {
         let response = await fetch(`${urlPath}?api_key=${apiKey}&ids=${misGifosString}`)
@@ -148,7 +148,6 @@ window.onload = () => {
         }
     )
 // ------------------ FUNCION PRINCIPAL DE RENDERIZAR LOS GIF Y SUS BOTONES--------------------------------------------------
-    
     function renderGif (response, container) {
         for (let i = 0; i < response.data.length; i++) {
             let newDiv = document.createElement('div')
@@ -172,15 +171,14 @@ window.onload = () => {
                 <span>${response.data[i].title}</span>
             </div>`
             newDiv.appendChild(newDivHover)
-
+            // ---------------------------- FUNCION FAVORITOS  ---------------------
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
             checkFavorites(response.data[i], imgFav, imgFav2)
 
             buttonFav.addEventListener('click', () => {
-                console.log(response.data[i].title)
-                if (favoritesGif.includes(response.data[i])) {
+                if (favoritesGif.map((x) => x.id).includes(response.data[i].id)) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
                     imgFav.setAttribute('src', '../assets/icon-fav.svg')
                     imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
@@ -191,25 +189,39 @@ window.onload = () => {
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
+            // ---------- FUNCION ZOOM EN MODO DESKTOP ---------------------
             let buttonZoomTrending = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoomTrending.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
                 let clone2 = newDivHover.cloneNode(true)
+                let buttonFavCloned = clone2.getElementsByClassName('icon Fav')[0]
+                buttonFavCloned.addEventListener('click', () => {
+                    let imgFavCloned = buttonFavCloned.getElementsByTagName('img')
+                    if (favoritesGif.map((x) => x.id).includes(response.data[i].id)) {
+                        favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-hover.svg')
+                    } else {
+                        favoritesGif.push(response.data[i])
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                    })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
             })
-        }
-    }
-    
-    let zoomGifClose = document.getElementById('zoomGifClose')
-        zoomGif.addEventListener('click', () => {
+            // ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
+            imgZoomGifClose.addEventListener('click', () => {
                 while (zoomGif.childNodes.length > 2) {
                     zoomGif.removeChild(zoomGif.lastChild);
                 }
+                checkFavorites(response.data[i], imgFav, imgFav2)
                 zoomGif.style.display = "none"
-    })
-    
+            })
+        }
+    }
 
 //------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
     function checkFavorites (gif, imgFav, imgFav2) {

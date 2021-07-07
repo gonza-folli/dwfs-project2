@@ -100,14 +100,14 @@ window.onload = () => {
                 <span>${response[i].title}</span>
             </div>`
             newDiv.appendChild(newDivHover)
-
+    // ---------------------------- FUNCION FAVORITOS  ---------------------
             let buttonFav = document.getElementById(`Fav-stored-${response[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response[i].id}`)
             checkFavorites(response[i], imgFav, imgFav2)
 
             buttonFav.addEventListener('click', () => {
-                if (favoritesGif.includes(response[i])) {
+                if (favoritesGif.map((x) => x.id).includes(response[i].id))  {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response[i].id})
                     imgFav.setAttribute('src', '../assets/icon-fav.svg')
                     imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
@@ -118,14 +118,36 @@ window.onload = () => {
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
-
+            // ---------- FUNCION ZOOM EN MODO DESKTOP ---------------------
             let buttonZoom = document.getElementById(`Zoom-stored-${response[i].id}`)
             buttonZoom.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
                 let clone2 = newDivHover.cloneNode(true)
+                let buttonFavCloned = clone2.getElementsByClassName('icon Fav')[0]
+                buttonFavCloned.addEventListener('click', () => {
+                    let imgFavCloned = buttonFavCloned.getElementsByTagName('img')
+                    if (favoritesGif.map((x) => x.id).includes(response[i].id)) {
+                        favoritesGif = favoritesGif.filter(function (x) {return x.id != response[i].id})
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-hover.svg')
+                    } else {
+                        favoritesGif.push(response[i])
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                    })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
+            })
+            // ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
+            imgZoomGifClose.addEventListener('click', () => {
+                while (zoomGif.childNodes.length > 2) {
+                    zoomGif.removeChild(zoomGif.lastChild);
+                }
+                checkFavorites(response[i], imgFav, imgFav2)
+                zoomGif.style.display = "none"
             })
         }
     }
@@ -181,7 +203,7 @@ window.onload = () => {
             renderGif(response, scrollSon)
         }
     )
-    //------------------------------RENDERIZAR IMAGENES------------------------------------------------
+    //------------------------------RENDERIZAR TRENDING------------------------------------------------
     
     function renderGif (response, container) {
         for (let i = 0; i < response.data.length; i++) {
@@ -212,10 +234,10 @@ window.onload = () => {
             let imgFav = document.getElementById(`imgFavTrend-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFavTrend2-${response.data[i].id}`)
             checkFavorites(response.data[i], imgFav, imgFav2)
-
+            // ---------------------------- FUNCION FAVORITOS  ---------------------
             buttonFav.addEventListener('click', () => {
                 console.log(response.data[i].title)
-                if (favoritesGif.includes(response.data[i])) {
+                if (favoritesGif.map((x) => x.id).includes(response.data[i].id)) {
                     favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
                     imgFav.setAttribute('src', '../assets/icon-fav.svg')
                     imgFav2.setAttribute('src', '../assets/icon-fav-hover.svg')
@@ -226,26 +248,40 @@ window.onload = () => {
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
                 })
-
-            
+            // ---------- FUNCION ZOOM EN MODO DESKTOP ---------------------
             let buttonZoomTrending = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoomTrending.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
                 let clone2 = newDivHover.cloneNode(true)
+                let buttonFavCloned = clone2.getElementsByClassName('icon Fav')[0]
+                buttonFavCloned.addEventListener('click', () => {
+                    let imgFavCloned = buttonFavCloned.getElementsByTagName('img')
+                    if (favoritesGif.map((x) => x.id).includes(response.data[i].id)) {
+                        favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-hover.svg')
+                    } else {
+                        favoritesGif.push(response.data[i])
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                    })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
             })
-        }
-    }
-    
-    let zoomGifClose = document.getElementById('zoomGifClose')
-        zoomGif.addEventListener('click', () => {
+            // ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
+            imgZoomGifClose.addEventListener('click', () => {
                 while (zoomGif.childNodes.length > 2) {
                     zoomGif.removeChild(zoomGif.lastChild);
                 }
+                checkFavorites(response.data[i], imgFav, imgFav2)
                 zoomGif.style.display = "none"
-    })
+            })
+        }
+    }
+    
 
 //------------------------------CHEQUEO DE FAVORITOS------------------------------------------------
     function checkFavorites (gif, imgFav, imgFav2) {

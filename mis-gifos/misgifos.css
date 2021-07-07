@@ -332,6 +332,11 @@ div.scrollRight:hover img.buttonRight {
     outline: none;
     border: none;
 }
+@media screen and (max-width: 768px) {
+    .containerGif:hover div.containerGifSelected {
+        display: none;
+    }
+}
 
 /* ------------------- HOVER ICONOS -------------------------- */
 .containerGifSelected .imgButtonHover {
@@ -555,7 +560,7 @@ body.night h1,
 body.night h2, 
 body.night h3, 
 body.night p, 
-body.night header .menu-header li a, 
+body.night li a, 
 body.night section.trending-gifos p {
     color: white;
 }
@@ -578,4 +583,7 @@ body.night section.home div.search-home {
 }
 body.night div.autocomplete {
     color: dimgray;
+}
+body.night header .menu-header li a.buttonCrearGifo {
+    color: #9CAFC3;
 }

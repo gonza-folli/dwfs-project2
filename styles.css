@@ -404,6 +404,11 @@ div.scrollRight:hover img.buttonRight {
     outline: none;
     border: none;
 }
+@media screen and (max-width: 768px) {
+    .containerGif:hover div.containerGifSelected {
+        display: none;
+    }
+}
 
 /* ------------------- HOVER ICONOS -------------------------- */
 .containerGifSelected .imgButtonHover {
@@ -650,6 +655,3 @@ body.night section.home div.search-home {
 body.night div.autocomplete {
     color: #9CAFC3;
 }
-/* body.night section.home input {
-    color: white;
-} */
