@@ -112,7 +112,14 @@ window.onload = () => {
     getMisGifos().then(
         (response) => {
             renderGif(response, searchResults)
-            containerGif = document.querySelectorAll('.containerGif')   
+            containerGif = document.querySelectorAll('.containerGif')  
+            if (containerGif.length > 0) {
+                resultsIcon.style.display = "none"
+                resultsText.style.display = "none"
+            }
+            if (containerGif.length > 12) {
+                moreResults.style.display = "block"
+            }
             renderMoreResults()
     })
 
@@ -121,6 +128,7 @@ window.onload = () => {
     function renderMoreResults() {
         if (indexFinal > containerGif.length) {
         indexFinal = containerGif.length;
+        moreResults.style.display = "none"
         }
         for (let i = 0; i < indexFinal; i++) {
             containerGif[i].style.display= "block"
@@ -189,6 +197,34 @@ window.onload = () => {
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
             })
+            // ------------------------------ FUNCION ZOOM EN MODO MOBILE ---------------------
+            newItem.addEventListener('click', () => {
+                let clone = newItem.cloneNode(true)
+                let clone2 = newDivHover.cloneNode(true)
+                let buttonFavCloned = clone2.getElementsByClassName('icon Fav')[0]
+                buttonFavCloned.addEventListener('click', () => {
+                    let imgFavCloned = buttonFavCloned.getElementsByTagName('img')
+                    if (favoritesGif.map((x) => x.id).includes(response.data[i].id)) {
+                        favoritesGif = favoritesGif.filter(function (x) {return x.id != response.data[i].id})
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-hover.svg')
+                    } else {
+                        favoritesGif.push(response.data[i])
+                        imgFavCloned[0].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                        imgFavCloned[1].setAttribute('src', '../assets/icon-fav-activev2.svg')
+                    }
+                    localStorage.setItem('favorites', JSON.stringify(favoritesGif))
+                })
+                let buttonDesCloned = clone2.getElementsByClassName('icon Des')[0]
+                buttonDesCloned.addEventListener('click', () => {
+                    let url = `${response.data[i].images['original'].url}`
+                    let filename = `${response.data[i].id}`
+                    downloadGif(url, filename)
+                })
+                zoomGif.appendChild(clone)
+                zoomGif.appendChild(clone2)
+                zoomGif.style.display = "flex"
+            })
             // ---------- FUNCION ZOOM EN MODO DESKTOP ---------------------
             let buttonZoomTrending = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoomTrending.addEventListener('click', () => {
@@ -207,7 +243,13 @@ window.onload = () => {
                         imgFavCloned[1].setAttribute('src', '../assets/icon-fav-activev2.svg')
                     }
                     localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-                    })
+                })
+                let buttonDesCloned = clone2.getElementsByClassName('icon Des')[0]
+                buttonDesCloned.addEventListener('click', () => {
+                    let url = `${response.data[i].images['original'].url}`
+                    let filename = `${response.data[i].id}`
+                    downloadGif(url, filename)
+                })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
@@ -220,7 +262,30 @@ window.onload = () => {
                 checkFavorites(response.data[i], imgFav, imgFav2)
                 zoomGif.style.display = "none"
             })
+            // -------------------------------------- BOTON PARA DESCARGAR ---------------------
+            let buttonDes = document.getElementById(`Des-${response.data[i].id}`)
+            buttonDes.addEventListener('click', () => {
+                let url = `${response.data[i].images['original'].url}`
+                let filename = `${response.data[i].id}`
+                downloadGif(url, filename)
+            })
         }
+    }
+
+    // -------------------------------------- FUNCION DESCARGAR --------------------
+    function downloadGif(url, filename) {
+        fetch(url).then(
+            (response) => {
+                return response.blob().then(
+                    (response) => {
+                        let newElement = document.createElement('a')
+                        newElement.href = URL.createObjectURL(response)
+                        newElement.setAttribute('download', filename)
+                        newElement.click()
+                    }
+                )
+            }
+        )
     }
 
 //------------------------------CHEQUEO DE FAVORITOS------------------------------------------------

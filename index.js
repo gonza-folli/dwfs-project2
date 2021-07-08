@@ -15,7 +15,7 @@ window.onload = () => {
     let imgZoomGifClose = document.getElementById('zoomGifClose')
     let flag = localStorage.getItem("Nocturne Mode") ? JSON.parse(localStorage.getItem("Nocturne Mode")) : true
     let flagBurger = 0
-    console.log(flag)
+
     //------------------------------MODO NOCTURNO------------------------------------------------
     if (flag == false) {
         body[0].classList.add('night')
@@ -53,8 +53,7 @@ window.onload = () => {
         buttonRight.setAttribute('src', './assets/button-slider-right-md-noct.svg')
         imgZoomGifClose.setAttribute('src', './assets/close-modo-noct.svg')
         for (let i = 0; i < iconSuggestedSearch.length; i++) {
-            iconSuggestedSearch[i].setAttribute('src', './assets/icon-search-modo-noct.svg')
-        }
+            iconSuggestedSearch[i].setAttribute('src', './assets/icon-search-modo-noct.svg')}
         } else {
             imgLogoDesktop.setAttribute('src', './assets/logo-desktop.svg')
             imgLogoMobile.setAttribute('src', './assets/logo-mobile.svg')
@@ -93,8 +92,7 @@ window.onload = () => {
     
     let urlPath = "https://api.giphy.com/v1/gifs"
     let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
-    let apiKey2 = "DjElvlwE1GAAFq1RVpDkjCpWZfhT1c1a"
-    
+
 // ---------------------- SEARCH BAR -------------------------------------------------
     let inputSearchBar = document.getElementById('searchBar')
     let searchBarLimit = 12
@@ -247,8 +245,7 @@ window.onload = () => {
                 <span>${response.data[i].title}</span>
             </div>`
             newDiv.appendChild(newDivHover)
-
-            // ---------------------------- FUNCION FAVORITOS  ---------------------
+            // ---------------------------------------- FUNCION FAVORITOS  ---------------------
             let buttonFav = document.getElementById(`Fav-${response.data[i].id}`)
             let imgFav = document.getElementById(`imgFav-${response.data[i].id}`)
             let imgFav2 = document.getElementById(`imgFav2-${response.data[i].id}`)
@@ -266,7 +263,7 @@ window.onload = () => {
                 }
                 localStorage.setItem('favorites', JSON.stringify(favoritesGif))
                 })
-            // ---------- FUNCION ZOOM EN MODO MOBILE ---------------------
+            // ------------------------------ FUNCION ZOOM EN MODO MOBILE ---------------------
             newItem.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
                 let clone2 = newDivHover.cloneNode(true)
@@ -283,12 +280,18 @@ window.onload = () => {
                         imgFavCloned[1].setAttribute('src', './assets/icon-fav-activev2.svg')
                     }
                     localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-                    })
+                })
+                let buttonDesCloned = clone2.getElementsByClassName('icon Des')[0]
+                buttonDesCloned.addEventListener('click', () => {
+                    let url = `${response.data[i].images['original'].url}`
+                    let filename = `${response.data[i].id}`
+                    downloadGif(url, filename)
+                })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
             })
-            // ---------- FUNCION ZOOM EN MODO DESKTOP ---------------------
+            // --------------------------------- FUNCION ZOOM EN MODO DESKTOP ---------------------
             let buttonZoom = document.getElementById(`Zoom-${response.data[i].id}`)
             buttonZoom.addEventListener('click', () => {
                 let clone = newItem.cloneNode(true)
@@ -306,12 +309,18 @@ window.onload = () => {
                         imgFavCloned[1].setAttribute('src', './assets/icon-fav-activev2.svg')
                     }
                     localStorage.setItem('favorites', JSON.stringify(favoritesGif))
-                    })
+                })
+                let buttonDesCloned = clone2.getElementsByClassName('icon Des')[0]
+                buttonDesCloned.addEventListener('click', () => {
+                    let url = `${response.data[i].images['original'].url}`
+                    let filename = `${response.data[i].id}`
+                    downloadGif(url, filename)
+                })
                 zoomGif.appendChild(clone)
                 zoomGif.appendChild(clone2)
                 zoomGif.style.display = "flex"
                 })
-            // ------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
+            // ------------------------------------ CERRAR EL ZOOM DEL GIF -----------------------------------
             imgZoomGifClose.addEventListener('click', () => {
                 while (zoomGif.childNodes.length > 2) {
                     zoomGif.removeChild(zoomGif.lastChild);
@@ -319,19 +328,31 @@ window.onload = () => {
                 checkFavorites(response.data[i], imgFav, imgFav2)
                 zoomGif.style.display = "none"
             })
-            }
+            // -------------------------------------- BOTON PARA DESCARGAR ---------------------
+            let buttonDes = document.getElementById(`Des-${response.data[i].id}`)
+            buttonDes.addEventListener('click', () => {
+                let url = `${response.data[i].images['original'].url}`
+                let filename = `${response.data[i].id}`
+                downloadGif(url, filename)
+            })
+        }
     }
 
-
-
-    // imgZoomGifClose.addEventListener('click', () => {
-    //         while (zoomGif.childNodes.length > 2) {
-    //             zoomGif.removeChild(zoomGif.lastChild);
-    //         }
-    //         checkFavorites()
-    //         zoomGif.style.display = "none"
-    // })  
-
+// -------------------------------------- FUNCION DESCARGAR --------------------
+    function downloadGif(url, filename) {
+        fetch(url).then(
+            (response) => {
+                return response.blob().then(
+                    (response) => {
+                        let newElement = document.createElement('a')
+                        newElement.href = URL.createObjectURL(response)
+                        newElement.setAttribute('download', filename)
+                        newElement.click()
+                    }
+                )
+            }
+        )
+    }
 //------------------------------MAS RESULTADOS------------------------------------------------
 
     moreResults.addEventListener('click', () => {
