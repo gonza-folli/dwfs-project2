@@ -362,9 +362,9 @@ window.onload = () => {
 
 //------------------------------TRENDING------------------------------------------------
     let scrollSon = document.getElementById('scroll-son')
-
+    let apiKey2 = "DjElvlwE1GAAFq1RVpDkjCpWZfhT1c1a"
     async function getTrending () {
-        let response = await fetch(`${urlPath}/trending?api_key=${apiKey}&limit=3&rating=g`)
+        let response = await fetch(`${urlPath}/trending?api_key=${apiKey2}&limit=3&rating=g`)
         response = await response.json()
         return response
     }
@@ -377,10 +377,10 @@ window.onload = () => {
     function renderTrendingTitle (response) {
         let newItem = document.createElement('p')
         newItem.classList.add('trending-p')
+        console.log(response)
         newItem.innerHTML = `${response.data[0].title},${response.data[1].title},${response.data[2].title}`
         trendingHome.appendChild(newItem)
     }
-    
 
 
 //------------------------------CHEQUEO DE FAVORITOS------------------------------------------------

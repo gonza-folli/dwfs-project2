@@ -12,6 +12,8 @@ window.onload = () => {
     let screenButton1 = document.getElementById('screenButton1')
     let screenButton2 = document.getElementById('screenButton2')
     let screenButton3 = document.getElementById('screenButton3')
+    let timerDiv = document.getElementById('timerDiv')
+    let repeat = document.getElementById('repeat')
 
     //------------------------------MODO NOCTURNO------------------------------------------------
     if (flag == false) {
@@ -45,6 +47,8 @@ window.onload = () => {
         screenButton1.style.color = "white"
         screenButton2.style.color = "white"
         screenButton3.style.color = "white"
+        timerDiv.style.color = "white"
+        repeat.style.color = "white"
         } else {
             imgLogoDesktop.setAttribute('src', '../assets/logo-desktop.svg')
             imgLogoMobile.setAttribute('src', '../assets/logo-mobile.svg')
@@ -54,6 +58,8 @@ window.onload = () => {
             screenButton1.style.color = "#572EE5"
             screenButton2.style.color = "#572EE5"
             screenButton3.style.color = "#572EE5"
+            timerDiv.style.color = "#572EE5"
+            repeat.style.color = "#572EE5"
         }
     }
 
@@ -155,8 +161,6 @@ video.onplay = function () {
 
 // --------------------------------GRABAR GIF--------------------------------------------
 let tiempo = 0
-let timerDiv = document.getElementById('timerDiv')
-let repeat = document.getElementById('repeat')
 let videoCurrentTime = 0
 
 
@@ -206,7 +210,7 @@ repeat.addEventListener('click', () => {
 
 // --------------------------------SUBIR GIF--------------------------------------------
 let form = new FormData()
-let urlPath = "https://upload.giphy.com/v1/gifs"
+let urlPath = "https://api.giphy.com/v1/gifs"
 let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
 let uploadedGif = localStorage.getItem('Mis_Gifs') ? JSON.parse(localStorage.getItem('Mis_Gifs')) : []
 let videoContainer = document.getElementById('videoContainer')
@@ -219,11 +223,6 @@ console.log(uploadedGif)
 uploadButton.addEventListener('click', () => {
     renderButtonsColor(screenButton2, screenButton3)
 
-    // screenButton2.style.color = "#572EE5"
-    // screenButton2.style.backgroundColor = "transparent"
-    // screenButton3.style.color = "white"
-    // screenButton3.style.backgroundColor = "#572EE5"
-
     videoHover.style.display = "flex"
     uploadButton.style.display = "none"
     repeat.style.display= "none"
@@ -232,6 +231,7 @@ uploadButton.addEventListener('click', () => {
     
     uploadGif(form).then(response => {
         console.log(response.data.id)
+        console.log(response)
         renderSuccess(response)
     }).catch(error => console.error)
 
@@ -258,6 +258,27 @@ function renderSuccess (response) {
     <button class="icon Fav" id="Fav-${response.data.id}" type="button"><img id="imgFav-${response.data.id}" class="imgButton" src="../assets/icon-link-normal.svg" alt="fav"><img id="imgFav2-${response.data.id}" class="imgButtonHover" src="../assets/icon-link-hover.svg" alt="fav"></button>
     `
     videoHover.appendChild(newDiv)
+    let buttonDes = document.getElementById(`Des-${response.data.id}`)
+    buttonDes.addEventListener('click', () => {
+        let url = `${urlPath}?api_key=${apiKey}&ids=${response.data.id}`
+        let filename = `${response.data.id}`
+        downloadGif(url, filename)
+    })
+}
+// -------------------------------------- FUNCION DESCARGAR --------------------
+function downloadGif(url, filename) {
+    fetch(url).then(
+        (response) => {
+            return response.blob().then(
+                (response) => {
+                    let newElement = document.createElement('a')
+                    newElement.href = URL.createObjectURL(response)
+                    newElement.setAttribute('download', filename)
+                    newElement.click()
+                }
+            )
+        }
+    )
 }
 
 

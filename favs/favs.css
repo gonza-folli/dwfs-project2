@@ -126,6 +126,15 @@ header .menu-header li a.favs {
     text-decoration-line: underline;
     
 }
+.crearGifImgHover {
+    display: none;
+}
+.linkCrearGifo:hover .crearGifImg {
+    display: none;
+}
+.linkCrearGifo:hover .crearGifImgHover {
+    display: block;
+}
 
 /* MENU HAMBURGUESA ACTIVADO */
 input.burgerMenu:checked~nav{
