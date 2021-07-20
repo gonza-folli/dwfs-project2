@@ -42,6 +42,7 @@ window.onload = () => {
         imgMoreResultsIcon.setAttribute('src', '../assets/CTA-ver+-modo-noc.svg')
         buttonLeft.setAttribute('src', '../assets/button-slider-left-md-noct.svg')
         buttonRight.setAttribute('src', '../assets/button-slider-right-md-noct.svg')
+        imgZoomGifClose.setAttribute('src', '../assets/close-modo-noct.svg')
         } else {
             imgLogoDesktop.setAttribute('src', '../assets/logo-desktop.svg')
             imgLogoMobile.setAttribute('src', '../assets/logo-mobile.svg')

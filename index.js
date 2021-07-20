@@ -168,15 +168,15 @@ window.onload = () => {
     })
 
     // -----------    AUTOCOMPLETAR CON SUGERIDOS---------------------------------
+    let li = document.querySelectorAll('.autoc')
+    let liSpan = document.querySelectorAll('.autocSpan')
+
     async function autocompleteSearch (searchBar) {
         let response = await fetch(`${urlPath}/search/tags?api_key=${apiKey}&q=${searchBar}&limit=4&offset=0&rating=g&lang=en`)
         response = await response.json()
         renderAutocompleteSearch (response)
     }
 
-    let li = document.querySelectorAll('.autoc')
-    let liSpan = document.querySelectorAll('.autocSpan')
-    let selectedLi = 0
 
     function renderAutocompleteSearch (response) {
         separateSearch.style.display= "block"
@@ -185,19 +185,24 @@ window.onload = () => {
             li[i].style.display= "block"
             li[i].setAttribute('id', `result${i}`)
             liSpan[i].innerHTML = `${response.data[i].name}`
-            li[i].addEventListener('click', () => {
-                selectedLi = li[i].textContent
-                console.log(selectedLi)
-                inputSearchBar.value = selectedLi
-                separateSearch.style.display= "none"
-                autocomplete.style.display = "none"
-                renderIconSearchBar()
-            })
         }
         if (inputSearchBar.value == "") {
             separateSearch.style.display= "none"
             autocomplete.style.display = "none"
         }
+    }
+
+    for (let i = 0; i < liSpan.length; i++) {
+        liSpan[i].addEventListener('click', () => {
+            separateSearch.style.display= "none"
+            autocomplete.style.display = "none"
+            cleanResults()
+            trendingHome.style.display = "none"
+            renderSearchTitle(liSpan[i].textContent)
+            searchGifos(liSpan[i].textContent)
+            inputSearchBar.value = ""
+            renderIconSearchBar()
+        })
     }
 
     //------------- LIMPIAR GIF OBTENIDOS COMO RESULTADOS ----------------------
@@ -208,6 +213,8 @@ window.onload = () => {
     }
 
     // --------------------- RENDERIZAR TITULOS Y GIF --------------------------
+    let badSearchImg = document.getElementById('badSearchImg')
+    let badSearchText = document.getElementById('badSearchText')
     function renderSearchTitle (searchBar) {
         searchResultsTitle.innerHTML = `${searchBar}`
         searchResultsTitle.style.display = "block"
@@ -220,6 +227,14 @@ window.onload = () => {
         response = await response.json()
         console.log(response)
         renderGif(response, searchResults)
+        if (response.data.length == 0) {
+            badSearchImg.style.display= "block"
+            badSearchText.style.display= "block"
+            moreResults.style.display= "none"
+        } else {
+            badSearchImg.style.display= "none"
+            badSearchText.style.display= "none"
+        }
     }
 // ------------------ FUNCION PRINCIPAL DE RENDERIZAR LOS GIF Y SUS BOTONES------------------------
     function renderGif (response, container) {
@@ -396,6 +411,5 @@ window.onload = () => {
             }
         }
     }
-
 
 }

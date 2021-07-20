@@ -276,6 +276,16 @@ section.home h1 {
     margin-top: 8%;
     display: none;
 }
+img.badSearchImg {
+    margin: 10% 0 0 0;
+    display: none;
+}
+h2.badSearchText {
+    color: #50E3C2;
+    font-size: 22px;
+    margin: 5% 0 0 0;
+    display: none;
+}
 div.searchResults {
     display: none;
     justify-content: center;

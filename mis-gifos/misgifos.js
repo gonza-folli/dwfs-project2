@@ -41,6 +41,7 @@ window.onload = () => {
         imgMoreResultsIcon.setAttribute('src', '../assets/CTA-ver+-modo-noc.svg')
         buttonLeft.setAttribute('src', '../assets/button-slider-left-md-noct.svg')
         buttonRight.setAttribute('src', '../assets/button-slider-right-md-noct.svg')
+        imgZoomGifClose.setAttribute('src', '../assets/close-modo-noct.svg')
         } else {
             imgLogoDesktop.setAttribute('src', '../assets/logo-desktop.svg')
             imgLogoMobile.setAttribute('src', '../assets/logo-mobile.svg')
@@ -81,7 +82,15 @@ window.onload = () => {
     
     console.log(misGifos)
 
-    if (misGifos !== []) {
+    // if (misGifos !== []) {
+    //     resultsIcon.style.display= "none"
+    //     resultsText.style.display= "none"
+    //     } 
+    //     else {
+    //         searchResults.style.display= "none"
+    //     }
+
+    if (misGifos.length > 0) {
         resultsIcon.style.display= "none"
         resultsText.style.display= "none"
         } 
@@ -109,19 +118,17 @@ window.onload = () => {
     }
 
     //----------------------------RESOLUCION DE LA PROMESA Y MOSTRAR MAS RESULTADOS----------------------------------------------------------
-    getMisGifos().then(
+    if (misGifos.length > 0) {
+        getMisGifos().then(
         (response) => {
             renderGif(response, searchResults)
-            containerGif = document.querySelectorAll('.containerGif')  
-            if (containerGif.length > 0) {
-                resultsIcon.style.display = "none"
-                resultsText.style.display = "none"
-            }
+            containerGif = document.querySelectorAll('.containerGif')
             if (containerGif.length > 12) {
                 moreResults.style.display = "block"
             }
             renderMoreResults()
-    })
+        })
+    }
 
     let indexFinal = 12
 

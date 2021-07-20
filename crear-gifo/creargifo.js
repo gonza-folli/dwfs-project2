@@ -80,206 +80,212 @@ window.onload = () => {
     )
 
 /* ------------------ ACCEDER A LA CAMARA ----------------------------------------- */
-let video = document.getElementById('video')
-let startButton = document.getElementById('startButton')
-let recordButton = document.getElementById('recordButton')
-let finishButton = document.getElementById('finishButton')
-let uploadButton = document.getElementById('uploadButton')
-let screen = document.getElementById('screen')
-let screenText = document.getElementById('screenText')
-let screenTextP = document.getElementById('screenTextP')
-let screenText2 = document.getElementById('screenText2')
-let screenTextP2 = document.getElementById('screenTextP2')
+    let video = document.getElementById('video')
+    let startButton = document.getElementById('startButton')
+    let recordButton = document.getElementById('recordButton')
+    let finishButton = document.getElementById('finishButton')
+    let uploadButton = document.getElementById('uploadButton')
+    let screen = document.getElementById('screen')
+    let screenText = document.getElementById('screenText')
+    let screenTextP = document.getElementById('screenTextP')
+    let screenText2 = document.getElementById('screenText2')
+    let screenTextP2 = document.getElementById('screenTextP2')
 
 
 
-console.log(navigator.mediaDevices)
+    console.log(navigator.mediaDevices)
 
-function renderButtonsColor (btn1, btn2) {
-    if (flag == true) {
-        btn1.style.color = "#572EE5"
-        btn1.style.backgroundColor = "transparent"
-        btn2.style.color = "white"
-        btn2.style.backgroundColor = "#572EE5"
-    } else {
-        btn1.style.color = "white"
-        btn1.style.backgroundColor = "transparent"
-        btn2.style.color = "white"
-        btn2.style.backgroundColor = "#572EE5"
-    }
-} 
+    function renderButtonsColor (btn1, btn2) {
+        if (flag == true) {
+            btn1.style.color = "#572EE5"
+            btn1.style.backgroundColor = "transparent"
+            btn2.style.color = "white"
+            btn2.style.backgroundColor = "#572EE5"
+        } else {
+            btn1.style.color = "white"
+            btn1.style.backgroundColor = "transparent"
+            btn2.style.color = "white"
+            btn2.style.backgroundColor = "#572EE5"
+        }
+    } 
 
 // --------------------------------COMENZAR PROCESO--------------------------------------------
-startButton.addEventListener('click', () => {
-    screenText.style.display = "none"
-    screenTextP.style.display = "none"
-    screenText2.style.display = "block"
-    screenTextP2.style.display = "block"
-    screenButton1.style.color = "white"
-    screenButton1.style.backgroundColor = "#572EE5"
-    startButton.style.display = "none"
-    accessToCamera()
-})
+    startButton.addEventListener('click', () => {
+        screenText.style.display = "none"
+        screenTextP.style.display = "none"
+        screenText2.style.display = "block"
+        screenTextP2.style.display = "block"
+        screenButton1.style.color = "white"
+        screenButton1.style.backgroundColor = "#572EE5"
+        startButton.style.display = "none"
+        accessToCamera()
+    })
 
 // --------------------------------ACCEDIENDO A LA CAMARA--------------------------------------------
-let stream = 0
-let recorder = 0
-let tracks = 0
+    let stream = 0
+    let recorder = 0
+    let tracks = 0
 
-function accessToCamera () {
-    stream = navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: true,
-    }).then(function(stream) {
-        video.srcObject = stream
-        video.play()
-        screenText2.style.display = "none"
-        screenTextP2.style.display = "none"
-        videoContainer.style.display = "block"
-        renderButtonsColor(screenButton1, screenButton2)
+    function accessToCamera () {
+        stream = navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: true,
+        }).then(function(stream) {
+            video.srcObject = stream
+            video.play()
+            screenText2.style.display = "none"
+            screenTextP2.style.display = "none"
+            videoContainer.style.display = "block"
+            renderButtonsColor(screenButton1, screenButton2)
 
-        // screenButton1.style.color = "#572EE5"
-        // screenButton1.style.backgroundColor = "transparent"
-        // screenButton2.style.color = "white"
-        // screenButton2.style.backgroundColor = "#572EE5"
-
-        recordButton.style.display = "block"
-        recorder = RecordRTC(stream, {
-            type: 'gif',
-            frameRate: 1,
-            quality: 10,
-            width: 360,
-            hidden: 240,
+            recordButton.style.display = "block"
+            recorder = RecordRTC(stream, {
+                type: 'gif',
+                frameRate: 1,
+                quality: 10,
+                width: 360,
+                hidden: 240,
+            })
+            tracks = stream.getTracks()
         })
-        tracks = stream.getTracks()
-    })
-}
+    }
 
-video.onplay = function () {
-    screen.style.height = "auto"
-}
+    video.onplay = function () {
+        screen.style.height = "auto"
+    }
 
 // --------------------------------GRABAR GIF--------------------------------------------
-let tiempo = 0
-let videoCurrentTime = 0
+    let tiempo = 0
+    let videoCurrentTime = 0
 
 
-recordButton.addEventListener('click', () => {
-    console.log(recorder)
-    recorder.startRecording()
+    recordButton.addEventListener('click', () => {
+        console.log(recorder)
+        recorder.startRecording()
 
-    tiempo = setInterval(timer,1000) //para iniciar el tiempo
-    video.currentTime = videoCurrentTime
-    console.log(videoCurrentTime)
-    function timer () {
-        let s = parseInt(video.currentTime % 60);
-        let m = parseInt((video.currentTime / 60) % 60);
-        timerDiv.innerHTML = '00:'+ m + ':' + s ;
-    }
-    recordButton.style.display = "none"
-    finishButton.style.display = "block"
-})
+        tiempo = setInterval(timer,1000) //para iniciar el tiempo
+        video.currentTime = videoCurrentTime
+        console.log(videoCurrentTime)
+        function timer () {
+            let s = parseInt(video.currentTime % 60);
+            let m = parseInt((video.currentTime / 60) % 60);
+            timerDiv.style.display= "block"
+            timerDiv.innerHTML = '00:'+ m + ':' + s ;
+        }
+        recordButton.style.display = "none"
+        finishButton.style.display = "block"
+    })
 
 // --------------------------------FINALIZAR GIF--------------------------------------------
-let recordedGif = 0
+    let recordedGif = 0
 
-finishButton.addEventListener('click', () => {
-    recorder.stopRecording(function() {
-        recordedGif = recorder.getBlob();   //para almacenar el gif en la variable recordedGif
-        console.log(recordedGif)
-    });
-    video.pause()       //para apagar la cámara
-    tracks.forEach(function(track) {
-        track.stop();
+    finishButton.addEventListener('click', () => {
+        recorder.stopRecording(function() {
+            recordedGif = recorder.getBlob();   //para almacenar el gif en la variable recordedGif
+            console.log(recordedGif)
+        });
+        video.pause()       //para apagar la cámara
+        tracks.forEach(function(track) {
+            track.stop();
+        })
+        clearInterval(tiempo);  //para parar la ejecucion del evento automatico
+        timerDiv.style.display= "none"
+        repeat.style.display= "block"
+        finishButton.style.display = "none"
+        uploadButton.style.display = "block"
     })
-    clearInterval(tiempo);  //para parar la ejecucion del evento automatico
-    timerDiv.style.display= "none"
-    repeat.style.display= "block"
-    finishButton.style.display = "none"
-    uploadButton.style.display = "block"
-})
 
 // --------------------------------REPETIR CAPTURA GIF----------------------------------
 
-repeat.addEventListener('click', () => {
-    accessToCamera ()
-    repeat.style.display= "none"
-    uploadButton.style.display = "none"
-})
+    repeat.addEventListener('click', () => {
+        accessToCamera ()
+        repeat.style.display= "none"
+        uploadButton.style.display = "none"
+    })
 
 
 // --------------------------------SUBIR GIF--------------------------------------------
-let form = new FormData()
-let urlPath = "https://api.giphy.com/v1/gifs"
-let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
-let uploadedGif = localStorage.getItem('Mis_Gifs') ? JSON.parse(localStorage.getItem('Mis_Gifs')) : []
-let videoContainer = document.getElementById('videoContainer')
-let videoHover = document.getElementById('videoHover')
-let imgLoader = document.getElementById('imgLoader')
-let videoHoverText = document.getElementById('videoHoverText')
+    let form = new FormData()
+    let urlPath = "https://upload.giphy.com/v1/gifs"
+    let urlPathDownload = "https://api.giphy.com/v1/gifs"
+    let apiKey = "1MDqvbtJKgdp21ND6twL1o2xpVnN9hLQ"
+    let uploadedGif = localStorage.getItem('Mis_Gifs') ? JSON.parse(localStorage.getItem('Mis_Gifs')) : []
+    let videoContainer = document.getElementById('videoContainer')
+    let videoHover = document.getElementById('videoHover')
+    let imgLoader = document.getElementById('imgLoader')
+    let videoHoverText = document.getElementById('videoHoverText')
 
-console.log(uploadedGif)
+    console.log(uploadedGif)
 
-uploadButton.addEventListener('click', () => {
-    renderButtonsColor(screenButton2, screenButton3)
+    uploadButton.addEventListener('click', () => {
+        renderButtonsColor(screenButton2, screenButton3)
 
-    videoHover.style.display = "flex"
-    uploadButton.style.display = "none"
-    repeat.style.display= "none"
-    form.append('file', recordedGif, 'myGif.gif')
-    console.log(form.get('file'))
-    
-    uploadGif(form).then(response => {
-        console.log(response.data.id)
+        videoHover.style.display = "flex"
+        uploadButton.style.display = "none"
+        repeat.style.display= "none"
+        form.append('file', recordedGif, 'myGif.gif')
+        console.log(form.get('file'))
+        
+        uploadGif(form).then(response => {
+            console.log(response)
+            // console.log(response.data.images.original.url)
+            renderSuccess(response)
+        }).catch(error => console.error)
+
+    })
+
+    async function uploadGif (form) {
+        let response = await fetch(`${urlPath}?api_key=${apiKey}`, {
+            method: 'POST',
+            body: form
+        })
+        return response.json()
+    }
+
+    function renderSuccess (response) {
+        uploadedGif.push(response.data.id)
+        localStorage.setItem('Mis_Gifs',  JSON.stringify(uploadedGif))
+        imgLoader.setAttribute('src', '../assets/ok.svg')
+        videoHoverText.innerHTML = "GIFO subido con éxito"
+        let newDiv = document.createElement('div')
+        newDiv.classList.add('containerGifSelected')
+        newDiv.innerHTML = 
+        `
+        <button class="icon Des" id="Des-${response.data.id}" type="button"><img class="imgButton" src="../assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="../assets/icon-download-hover.svg" alt="des"></button>
+        <button class="icon Fav" id="Fav-${response.data.id}" type="button"><img id="imgFav-${response.data.id}" class="imgButton" src="../assets/icon-link-normal.svg" alt="fav"><img id="imgFav2-${response.data.id}" class="imgButtonHover" src="../assets/icon-link-hover.svg" alt="fav"></button>
+        `
+        videoHover.appendChild(newDiv)
+        let buttonDes = document.getElementById(`Des-${response.data.id}`)
+        buttonDes.addEventListener('click', () => {
+            let urlForFetch = `${urlPathDownload}?api_key=${apiKey}&ids=${response.data.id}`
+            searchUploadGif(urlForFetch)
+        })
+    }
+// -------------------------------------- FETCH ID GIF SUBIDO --------------------
+    async function searchUploadGif (urlForFetch) {
+        let response = await fetch(`${urlForFetch}`)
+        response = await response.json()
         console.log(response)
-        renderSuccess(response)
-    }).catch(error => console.error)
+        let filename = `${response.data[0].id}`
+        let urlForDownload = `${response.data[0].images.original.url}`
+        downloadGif(urlForDownload, filename)
+    }
 
-})
-
-async function uploadGif (form) {
-    let response = await fetch(`${urlPath}?api_key=${apiKey}`, {
-        method: 'POST',
-        body: form
-    })
-    return response.json()
-}
-
-function renderSuccess (response) {
-    uploadedGif.push(response.data.id)
-    localStorage.setItem('Mis_Gifs',  JSON.stringify(uploadedGif))
-    imgLoader.setAttribute('src', '../assets/ok.svg')
-    videoHoverText.innerHTML = "GIFO subido con éxito"
-    let newDiv = document.createElement('div')
-    newDiv.classList.add('containerGifSelected')
-    newDiv.innerHTML = 
-    `
-    <button class="icon Des" id="Des-${response.data.id}" type="button"><img class="imgButton" src="../assets/icon-download.svg" alt="des"><img class="imgButtonHover" src="../assets/icon-download-hover.svg" alt="des"></button>
-    <button class="icon Fav" id="Fav-${response.data.id}" type="button"><img id="imgFav-${response.data.id}" class="imgButton" src="../assets/icon-link-normal.svg" alt="fav"><img id="imgFav2-${response.data.id}" class="imgButtonHover" src="../assets/icon-link-hover.svg" alt="fav"></button>
-    `
-    videoHover.appendChild(newDiv)
-    let buttonDes = document.getElementById(`Des-${response.data.id}`)
-    buttonDes.addEventListener('click', () => {
-        let url = `${urlPath}?api_key=${apiKey}&ids=${response.data.id}`
-        let filename = `${response.data.id}`
-        downloadGif(url, filename)
-    })
-}
 // -------------------------------------- FUNCION DESCARGAR --------------------
-function downloadGif(url, filename) {
-    fetch(url).then(
-        (response) => {
-            return response.blob().then(
-                (response) => {
-                    let newElement = document.createElement('a')
-                    newElement.href = URL.createObjectURL(response)
-                    newElement.setAttribute('download', filename)
-                    newElement.click()
-                }
-            )
-        }
-    )
-}
-
+    function downloadGif(urlForDownload, filename) {
+        fetch(urlForDownload).then(
+            (response) => {
+                return response.blob().then(
+                    (response) => {
+                        console.log(response)
+                        let newElement = document.createElement('a')
+                        newElement.href = URL.createObjectURL(response)
+                        newElement.setAttribute('download', filename)
+                        newElement.click()
+                    }
+                )
+            }
+        )
+    }
 
 }

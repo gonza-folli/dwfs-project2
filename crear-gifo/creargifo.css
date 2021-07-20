@@ -341,6 +341,12 @@ button {
     display: none;
 }
 
+.repeat:hover{
+    text-decoration-color: #5ED7C6;
+    text-decoration-thickness: 3px;
+    text-decoration-line: underline;
+}
+
 @media screen and (max-width: 768px) {
     .divCamera {
         display: none;
